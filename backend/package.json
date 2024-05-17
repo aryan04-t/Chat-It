@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "Node.js, Express, MongoDB and React based backend of My Chat Application",
+  "description": "I am building a Node.js, Express, MongoDB and React based Chat Application",
   "main": "app.js",
   "scripts": {
     "dev": "nodemon app.js",

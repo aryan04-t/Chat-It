@@ -45,7 +45,7 @@ export const signup = async (req, res) => {
 };
 
 
-export const checkEmail = async (req, res) => {
+export const checkEmailForLogin = async (req, res) => {
     try{
         const {email} = req.body; 
         const user = await userModel.findOne({email}).select("-password"); 
@@ -73,7 +73,7 @@ export const checkEmail = async (req, res) => {
 };
 
 
-export const checkPassword = async (req, res) => {
+export const checkPasswordAndLogin = async (req, res) => {
     try{
         const {password, userId} = req.body; 
         const user = await userModel.findById(userId); 

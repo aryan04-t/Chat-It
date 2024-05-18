@@ -118,3 +118,21 @@ export const checkPasswordAndLogin = async (req, res) => {
         }); 
     }
 };
+
+
+
+export const logout = (req, res) => {
+    try{
+        res.cookie("jwt", "", {
+            maxAge: 0
+        }); 
+        return res.status(200).json({message : "Successfully Logged Out the User"}); 
+    }
+    catch(err){
+        console.log(`Error occured while logging out: ${err.message}`); 
+        return res.status(500).json({
+            message : 'Internal server error',
+            error : true 
+        })
+    }
+};

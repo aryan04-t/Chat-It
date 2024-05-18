@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors'; 
 import dotenv from 'dotenv'; 
 
+import authRoutes from './routes/authRoutes.js'; 
+
 import connectToDB from './db/connectToMongoDB.js';
 
 
@@ -17,12 +19,10 @@ app.use(cors({
     credentials : true
 })); 
 
+app.use(express.json()); 
 
-app.get('/', (req, res) => {
-    
-    res.json({message : "Testing the server"}); 
-    
-});
+
+app.use('/api/auth', authRoutes);
 
 
 connectToDB().then( () => {

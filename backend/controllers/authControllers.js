@@ -86,10 +86,9 @@ export const checkPassword = async (req, res) => {
             if(isPasswordCorrect){
                 
                 const tokenPayload = {
-                    id : user._id,
-                    email : user.email
+                    id : user._id
                 };
-
+                
                 generateTokenAndSetCookie(tokenPayload, res); 
 
                 return res.status(200).json({

@@ -4,16 +4,17 @@ import mongoose from 'mongoose';
 const userSchema = new mongoose.Schema({
     name : {
         type : String,
-        require : [true, "provide name"]
+        required : [true, "provide name"]
     },
     email : {
         type : String, 
-        require : [true, "provide email"],
+        required : [true, "provide email"],
         unique : true 
     },
     password : {
         type : String, 
-        required : [true, "provide password"]
+        required : [true, "provide password"],
+        minlength: 6
     },
     profile_pic : {
         type : String, 

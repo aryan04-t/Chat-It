@@ -58,8 +58,7 @@ export const checkEmailForLogin = async (req, res) => {
         }
         else{
             return res.status(400).json({
-                message : "User doesn't exist",
-                error : true
+                message : "User doesn't exist"
             })
         }
     }

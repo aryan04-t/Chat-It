@@ -24,12 +24,12 @@ const router = createBrowserRouter([
                 errorElement : <ErrorPage />
             },
             {
-                path : 'loginEmail',
+                path : 'login-email',
                 element : <AuthLayout> <CheckEmailLoginPage /> </AuthLayout>,
                 errorElement : <ErrorPage />
             },
             {
-                path : 'loginPassword',
+                path : 'login-password',
                 element : <AuthLayout> <CheckPasswordLoginPage /> </AuthLayout>,
                 errorElement : <ErrorPage />
             },
@@ -39,7 +39,7 @@ const router = createBrowserRouter([
                 errorElement : <ErrorPage />,
                 children : [
                     {
-                        path : ':userId', 
+                        path : ':user-id', 
                         element : <MessagePage />,
                         errorElement : <ErrorPage />
                     }

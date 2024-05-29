@@ -3,14 +3,21 @@ import cors from 'cors';
 import dotenv from 'dotenv'; 
 import cookieParser from 'cookie-parser';
 
+import cloudinary from 'cloudinary'; 
+
 import authRoutes from './routes/authRoutes.js'; 
 import userRoutes from './routes/userRoutes.js'; 
+import cloudinaryRoutes from './routes/cloudinaryRoutes.js'; 
 
 import connectToDB from './db/connectToMongoDB.js';
 
 
 dotenv.config();
-
+cloudinary.config({ 
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
+    api_key: process.env.CLOUDINARY_API_KEY, 
+    api_secret: process.env.CLOUDINARY_API_SECRET 
+});
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -26,6 +33,7 @@ app.use(cookieParser());
 
 
 app.use('/api/auth', authRoutes); 
+app.use('/api/delete-cloudinary-asset', cloudinaryRoutes); 
 app.use('/api/user', userRoutes); 
 
 

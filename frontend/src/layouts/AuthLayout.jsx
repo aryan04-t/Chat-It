@@ -4,7 +4,7 @@ import logo from '../assets/logo.png';
 const AuthLayout = ({children}) => {
   return (
     <>  
-      <header className="flex justify-center items-center py-3 h-23 shadow-md select-none">
+      <header className="flex justify-center items-center py-3 h-23 shadow-md shadow-zinc-800 select-none bg-zinc-900">
         <img 
           className='rounded-2xl'
           src={logo}

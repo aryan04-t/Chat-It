@@ -8,9 +8,6 @@ import uploadFile from '../helpers/uploadFile';
 
 const SignUpPage = () => {
 
-    const nameInputRef = useRef();
-    const emailInputRef = useRef();
-    const passwordInputRef = useRef();
     const imageInputRef = useRef();
 
     const [data, setData] = useState({
@@ -29,7 +26,9 @@ const SignUpPage = () => {
     } 
 
     const handleUploadPic = async (e) => {
-        e.stopPropagation();
+        e.preventDefault(); 
+        e.stopPropagation(); 
+
         const pic = e.target.files[0]; 
 
         setUploadPic(pic); 
@@ -53,10 +52,8 @@ const SignUpPage = () => {
         e.preventDefault();
         e.stopPropagation(); 
 
-        setUploadPic({});
-
         imageInputRef.current.value = ''; 
-
+        setUploadPic({});
         setData({
             ...data,
             profile_pic : ''
@@ -66,11 +63,12 @@ const SignUpPage = () => {
             const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
                 public_id : cloudinaryImgPublicID
             })
+            setCloudinaryImgPublicID(''); 
             toast.success(response.data.message); 
         }
         catch(err){
             toast.error(err.response.data.message); 
-            console.log(`Error occured while calling api for deleting cloudinary asset: ${err.message}`); 
+            console.log(`Error occured while calling api for deleting cloudinary asset: ${err.response.data.message}`); 
         }
     }
     
@@ -81,10 +79,7 @@ const SignUpPage = () => {
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, data)
         .then( (response) => {
             toast.success(response.data.message); 
-            nameInputRef.current.value = '';
-            emailInputRef.current.value = '';
-            passwordInputRef.current.value = '';
-            imageInputRef.current.value = '';
+            imageInputRef.current.value = ''; 
             setUploadPic({});
             setData({
                 name : '',
@@ -95,12 +90,12 @@ const SignUpPage = () => {
         })
         .catch( (err) => {
             toast.error(err.response.data.message); 
-            console.log(`Error occured while calling api for signing up user: ${err.message}`); 
+            console.log(`Error occured while calling api for signing up user: ${err.response.data.message}`); 
         }) 
     }
         
     return (
-        <div className='mt-5 flex justify-center items-center select-none'>
+        <div className='pt-5 pb-3 md:pt-8 md:pb-6 flex justify-center items-center select-none'>
             <div className='bg-zinc-800 w-full max-w-sm rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
 
                 <h3 className='text-3xl text-yellow-200 font-serif mt-4'>Welcome to ChatIt</h3> 
@@ -109,7 +104,6 @@ const SignUpPage = () => {
                     <div className='flex flex-col'>
                         <label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='name'>Name: </label>
                         <input
-                            ref={nameInputRef}
                             type='text' 
                             id='name'
                             name='name'
@@ -123,7 +117,6 @@ const SignUpPage = () => {
                     <div className='flex flex-col'>
                         <label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='email'>Email: </label>
                         <input
-                            ref={emailInputRef}
                             type='email' 
                             id='email'
                             name='email'
@@ -137,7 +130,6 @@ const SignUpPage = () => {
                     <div className='flex flex-col'>
                         <label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='password'>Password: </label>
                         <input
-                            ref={passwordInputRef}
                             type='password' 
                             id='password'
                             name='password'

@@ -18,11 +18,8 @@ const uploadFile = async (file) => {
         if(responseData.public_id !== ''){
             toast.success('Image uploaded successfully'); 
         }
-        else{
-            toast.error('Please select the image'); 
-        }
 
-        return responseData
+        return responseData;
     }
     catch(err){
         throw err;

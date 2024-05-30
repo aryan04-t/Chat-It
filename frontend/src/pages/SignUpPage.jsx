@@ -47,6 +47,7 @@ const SignUpPage = () => {
         }
         catch(err){
             toast.error(err.response.data.message); 
+            console.log(err); 
         }
     }
 
@@ -74,7 +75,7 @@ const SignUpPage = () => {
         }
         catch(err){
             toast.error(err?.response?.data?.message); 
-            console.log(`Error occured while calling api for deleting cloudinary asset: ${err?.response?.data?.message}`); 
+            console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
         }
     }
     
@@ -97,7 +98,7 @@ const SignUpPage = () => {
         })
         .catch( (err) => {
             toast.error(err?.response?.data?.message); 
-            console.log(`Error occured while calling api for signing up user: ${err?.response?.data?.message}`); 
+            console.log(`Error occured while calling api for signing up user: ${err}`); 
         }) 
     }
         

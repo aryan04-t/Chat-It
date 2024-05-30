@@ -22,6 +22,8 @@ const uploadFile = async (file) => {
         return responseData;
     }
     catch(err){
+        console.log(`Error occured while uploading file to cloudinary: ${err}`);
+        console.log(`Error thrown to upper hierarchy`); 
         throw err;
     }
 }

@@ -88,10 +88,11 @@ export const checkPasswordAndLogin = async (req, res) => {
                     id : user._id
                 };
                 
-                generateTokenAndSetCookie(tokenPayload, res); 
+                const token = generateTokenAndSetCookie(tokenPayload, res); 
 
                 return res.status(200).json({
                     message : 'Logged In successfully', 
+                    token, 
                     success : true
                 })
             }
@@ -122,10 +123,17 @@ export const checkPasswordAndLogin = async (req, res) => {
 
 export const logout = (req, res) => {
     try{
-        res.cookie("jwt", "", {
-            maxAge: 0
+        const cookieOptions =  {
+            maxAge : 0, 
+            httpOnly : true, 
+            sameSite : "strict", 
+            secure : true
+        };
+        res.cookie("jwt", "", cookieOptions); 
+        return res.status(200).json({
+            message : "Successfully Logged Out the User", 
+            success : true
         }); 
-        return res.status(200).json({message : "Successfully Logged Out the User"}); 
     }
     catch(err){
         console.log(`Error occured while logging out: ${err.message}`); 

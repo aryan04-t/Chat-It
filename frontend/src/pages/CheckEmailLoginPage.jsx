@@ -28,7 +28,7 @@ const CheckEmailLoginPage = () => {
 		})
 		.catch( (err) => {
 			toast.error(err?.response?.data?.message); 
-			console.log(`Error occured while calling api for verifying email: ${err?.response?.data?.message}`); 
+			console.log(`Error occured while calling api for verifying email: ${err}`); 
 		}) 
 	}
 

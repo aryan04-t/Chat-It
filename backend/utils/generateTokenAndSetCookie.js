@@ -15,6 +15,8 @@ const generateTokenAndSetCookie = (payload, res) => {
         };
 
         res.cookie('jwt', token, cookieOptions);
+
+        return token; 
     }
     catch(err){
         console.log(`Error occured while generating token and setting cookie: ${err.message}`); 

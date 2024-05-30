@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 
 
 import Avatar from '../components/Avatar.jsx';
+import { useDispatch } from 'react-redux';
+import { setToken } from '../redux/userSlice.js';
 
 
 const CheckPasswordLoginPage = () => {
@@ -13,6 +15,8 @@ const CheckPasswordLoginPage = () => {
 
 	const navigate = useNavigate(); 
   	const location = useLocation(); 
+
+	const dispatch = useDispatch(); 
 
 	useEffect( () => {
 		if(!location?.state?.name){
@@ -38,13 +42,20 @@ const CheckPasswordLoginPage = () => {
 			withCredentials : true 
 		})
 		.then( (response) => {
-			toast.success(response?.data?.message); 
-			setPassword(''); 
-			navigate(`/${location?.state?._id}`); 
+			if(response?.data?.success){
+				
+				toast.success(response?.data?.message); 
+				
+				dispatch(setToken(response?.data?.token));
+				localStorage.setItem('token', response?.data?.token); 
+				
+				setPassword(''); 
+				navigate(`/${location?.state?._id}`); 
+			}
 		})
 		.catch( (err) => {
 			toast.error(err?.response?.data?.message); 
-			console.log(`Error occured while calling api for logging user in: ${err?.response?.data?.message}`); 
+			console.log(`Error occured while calling api for logging user in: ${err}`); 
 		}) 
 	}
 

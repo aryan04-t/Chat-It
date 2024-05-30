@@ -1,6 +1,7 @@
 import React, { useRef, useState }  from 'react'
 import { IoClose } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { FaRegImage } from "react-icons/fa6";
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
 
@@ -19,6 +20,7 @@ const SignUpPage = () => {
 
     const [uploadPic, setUploadPic] = useState({}); 
     const [cloudinaryImgPublicID, setCloudinaryImgPublicID] = useState(''); 
+    const navigate = useNavigate(); 
 
     const handleFormInput = (e) => {
         const {name, value} = e.target; 
@@ -52,19 +54,23 @@ const SignUpPage = () => {
         e.preventDefault();
         e.stopPropagation(); 
 
-        imageInputRef.current.value = ''; 
-        setUploadPic({});
-        setData({
-            ...data,
-            profile_pic : ''
-        })
-        
-        try{
-            const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
-                public_id : cloudinaryImgPublicID
+        if(data.profile_pic !== ''){
+            imageInputRef.current.value = ''; 
+            setUploadPic({});
+            setData({
+                ...data,
+                profile_pic : ''
             })
-            setCloudinaryImgPublicID(''); 
-            toast.success(response.data.message); 
+        }
+
+        try{
+            if(cloudinaryImgPublicID !== ''){
+                const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
+                    public_id : cloudinaryImgPublicID
+                })
+                setCloudinaryImgPublicID(''); 
+                toast.success(response.data.message); 
+            }
         }
         catch(err){
             toast.error(err.response.data.message); 
@@ -87,6 +93,7 @@ const SignUpPage = () => {
                 password : '',
                 profile_pic : ''
             });    
+            navigate('/login-email'); 
         })
         .catch( (err) => {
             toast.error(err.response.data.message); 
@@ -143,8 +150,9 @@ const SignUpPage = () => {
                     <div className='flex flex-col'>
                         <p className='text-lg text-white font-sans mx-2'>Profile Pic: </p>
                         <label id='file-upload-label' htmlFor='profile_pic' className='h-14 w-72 max-width-72 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
-                            <p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden'> 
+                            <p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden flex gap-2 justify-center items-center'> 
                                 {uploadPic?.name ? uploadPic.name : 'Click Here to Upload'} 
+                                {uploadPic?.name ? '' : <FaRegImage />}
                             </p>
                             <button className='pl-1 pr-2' onClick={removePic}>
                                 {uploadPic?.name && <IoClose className='rounded-xl hover:bg-red-500 text-white' />} 
@@ -171,4 +179,4 @@ const SignUpPage = () => {
     )
 }
 
-export default SignUpPage
+export default SignUpPage; 

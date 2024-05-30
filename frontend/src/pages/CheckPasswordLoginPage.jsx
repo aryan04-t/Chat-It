@@ -1,4 +1,4 @@
-import React, { useState }  from 'react'
+import React, { useEffect, useState }  from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
@@ -14,6 +14,12 @@ const CheckPasswordLoginPage = () => {
 	const navigate = useNavigate(); 
   	const location = useLocation(); 
 
+	useEffect( () => {
+		if(!location?.state?.name){
+			navigate('/login-email'); 
+		}
+	}, []) 
+
 	const handlePasswordInput = (e) => { 
 		setPassword(e.target.value); 
 	} 
@@ -22,18 +28,23 @@ const CheckPasswordLoginPage = () => {
 		e.preventDefault();
 		e.stopPropagation(); 
 		
-		axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login/checkpassword`, {
-			password, 
-			userId : location?.state?._id
+		axios({
+			method : 'post', 
+			url : `${import.meta.env.VITE_BACKEND_URL}/api/auth/login/checkpassword`, 
+			data : {
+				password, 
+				userId : location?.state?._id 
+			}, 
+			withCredentials : true 
 		})
 		.then( (response) => {
-			toast.success(response.data.message); 
+			toast.success(response?.data?.message); 
 			setPassword(''); 
 			navigate(`/${location?.state?._id}`); 
 		})
 		.catch( (err) => {
-			toast.error(err.response.data.message); 
-			console.log(`Error occured while calling api for signing up user: ${err.response.data.message}`); 
+			toast.error(err?.response?.data?.message); 
+			console.log(`Error occured while calling api for logging user in: ${err?.response?.data?.message}`); 
 		}) 
 	}
 
@@ -69,7 +80,7 @@ const CheckPasswordLoginPage = () => {
 					</div>
 				</form>
 
-				<p className='text-white my-2'>New user? <Link to={'/signup'} className='text-yellow-200 hover:text-green-400'> Sign Up </Link> </p>
+				<p className='text-white my-2'> Forgot Password?? <Link to={'/forgot-password'} className='text-yellow-200 hover:text-green-400'> Click Here to Change It. </Link> </p>
 			</div>
 		</div>
 	)

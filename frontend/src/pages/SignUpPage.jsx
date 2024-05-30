@@ -69,12 +69,12 @@ const SignUpPage = () => {
                     public_id : cloudinaryImgPublicID
                 })
                 setCloudinaryImgPublicID(''); 
-                toast.success(response.data.message); 
+                toast.success(response?.data?.message); 
             }
         }
         catch(err){
-            toast.error(err.response.data.message); 
-            console.log(`Error occured while calling api for deleting cloudinary asset: ${err.response.data.message}`); 
+            toast.error(err?.response?.data?.message); 
+            console.log(`Error occured while calling api for deleting cloudinary asset: ${err?.response?.data?.message}`); 
         }
     }
     
@@ -84,7 +84,7 @@ const SignUpPage = () => {
         
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, data)
         .then( (response) => {
-            toast.success(response.data.message); 
+            toast.success(response?.data?.message); 
             imageInputRef.current.value = ''; 
             setUploadPic({});
             setData({
@@ -96,8 +96,8 @@ const SignUpPage = () => {
             navigate('/login-email'); 
         })
         .catch( (err) => {
-            toast.error(err.response.data.message); 
-            console.log(`Error occured while calling api for signing up user: ${err.response.data.message}`); 
+            toast.error(err?.response?.data?.message); 
+            console.log(`Error occured while calling api for signing up user: ${err?.response?.data?.message}`); 
         }) 
     }
         

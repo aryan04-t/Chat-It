@@ -20,15 +20,15 @@ const CheckEmailLoginPage = () => {
 		
 		axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login/checkemail`, {email})
 		.then( (response) => {
-			toast.success(response.data.message);
+			toast.success(response?.data?.message);
 			setEmail(''); 
 			navigate('/login-password', {
-				state : response.data.data 
+				state : response?.data?.data 
 			}); 
 		})
 		.catch( (err) => {
-			toast.error(err.response.data.message); 
-			console.log(`Error occured while calling api for signing up user: ${err.response.data.message}`); 
+			toast.error(err?.response?.data?.message); 
+			console.log(`Error occured while calling api for verifying email: ${err?.response?.data?.message}`); 
 		}) 
 	}
 

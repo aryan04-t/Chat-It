@@ -8,6 +8,7 @@ import Home from '../pages/Home';
 import MessagePage from '../components/MessagePage'; 
 import AuthLayout from '../layouts/AuthLayout';
 import ErrorPage from '../pages/ErrorPage';
+import ChangePasswordPage from '../pages/ChangePasswordPage';
 
 
 // Routing using plain objects 
@@ -31,6 +32,11 @@ const router = createBrowserRouter([
             {
                 path : 'login-password',
                 element : <AuthLayout> <CheckPasswordLoginPage /> </AuthLayout>,
+                errorElement : <ErrorPage />
+            },
+            {
+                path : 'forgot-password',
+                element : <AuthLayout> <ChangePasswordPage /> </AuthLayout>, 
                 errorElement : <ErrorPage />
             },
             {

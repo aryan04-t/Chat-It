@@ -6,8 +6,8 @@ import { getUserDetails, updateUserNameAndProfilePic } from '../controllers/user
 const router = express.Router(); 
 
 
-router.get('/', protectRoute, getUserDetails); 
-router.put('/update-user', protectRoute, updateUserNameAndProfilePic); 
+router.get('/details', protectRoute, getUserDetails); 
+router.put('/update', protectRoute, updateUserNameAndProfilePic); 
 
 
 export default router; 

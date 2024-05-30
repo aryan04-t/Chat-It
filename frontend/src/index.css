@@ -6,3 +6,79 @@
 #glow-button:hover, #file-upload-label:hover, form input:hover{
     box-shadow: 0 0 15px #fff 
 }
+
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 80px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 3px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 20%;
+    left: 230%;
+    margin-left: -60px;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 40%;
+    left: 0%;
+    margin-left: -10px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+
+
+.miniavatartooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.miniavatartooltip .miniavatartooltiptext {
+    visibility: hidden;
+    width: 80px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    font-size: 12px;
+    border-radius: 6px;
+    padding: 3px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 35%;
+    left: 230%;
+    margin-left: -55px;
+}
+
+.miniavatartooltip .miniavatartooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 40%;
+    left: 0%;
+    margin-left: -9.5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+
+.miniavatartooltip:hover .miniavatartooltiptext {
+    visibility: visible;
+}

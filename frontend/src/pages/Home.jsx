@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setUser, logout } from '../redux/userSlice'
 import toast from 'react-hot-toast'
 
+import Sidebar from '../components/Sidebar'
+
 
 const Home = () => {
 
@@ -36,14 +38,14 @@ const Home = () => {
 	}, [])
 
 	return (
-		<div>
-		
-			Home
+		<div className='grid lg:grid-cols-[400px,1fr] h-screen max-h-screen'>
+			<section className='bg-blue-500'>
+				<Sidebar />
+			</section>
 
 			<section>
 				<Outlet />
 			</section>
-
 		</div>
 	)
 }

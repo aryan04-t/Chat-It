@@ -15,8 +15,6 @@ import MiniAvatar from './MiniAvatar'
 
 const EditUserDetails = ({onClose, user}) => {
 	
-	console.log('This is redux store state: ', user); 
-
     const imageInputRef = useRef();	
 	const dispatch = useDispatch(); 
 	const navigate = useNavigate(); 
@@ -93,6 +91,12 @@ const EditUserDetails = ({onClose, user}) => {
         e.preventDefault();
         e.stopPropagation(); 
 
+		if(user?.name == data?.name && user?.profile_pic == data?.profile_pic){
+			toast.error('Please provide some new details for updating your profile');
+			toast.error('your current given input matches with your already existing details');
+			return; 
+		}
+
 		axios({
 			method : 'put', 
 			url : `${import.meta.env.VITE_BACKEND_URL}/api/user/update`,
@@ -129,7 +133,6 @@ const EditUserDetails = ({onClose, user}) => {
             });   
             setCloudinaryImgPublicID(''); 
 
-			console.log('This is backend response of db state: ', response?.data?.data); 
 			toast.success(response?.data?.message); 
 
 			onClose(); 

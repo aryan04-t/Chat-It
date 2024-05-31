@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-#glow-button:hover, #file-upload-label:hover, form input:hover{
+.glow-button:hover, .file-upload-label:hover, form input:hover{
     box-shadow: 0 0 15px #fff 
 }
 

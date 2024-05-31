@@ -29,7 +29,7 @@ export const updateUserNameAndProfilePic = async (req, res) => {
         }); 
         const updatedUserInformation = await userModel.findById(user._id).select('-password'); 
         return res.status(200).json({
-            message : "User's name and profile pic got updated successfully",
+            message : "User's profile details got updated successfully",
             data : updatedUserInformation, 
             success : true
         })

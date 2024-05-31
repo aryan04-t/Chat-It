@@ -25,8 +25,8 @@ const Home = () => {
 			dispatch(setUser(response?.data?.data)); 
 		}) 
 		.catch( (err) => {
+			toast.error(err?.response?.data?.message); 
 			if(err?.response?.data?.logout){
-				toast.error(err?.response?.data?.message); 
 				dispatch(logout()); 
 				navigate('/login-email'); 
 			}

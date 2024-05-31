@@ -5,12 +5,20 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { setProfilePicPublicId } from '../redux/userSlice';
+
 import uploadFile from '../helpers/uploadFile';
 
+
 const SignUpPage = () => {
-
+    
+    
     const imageInputRef = useRef();
-
+    
+    const user = useSelector(state => state.user); 
+    const dispatch = useDispatch(); 
+ 
     const [data, setData] = useState({
         name : '',
         email : '',
@@ -42,11 +50,11 @@ const SignUpPage = () => {
                 ...data,
                 profile_pic : uploadedPic?.secure_url 
             })
-    
+
             setCloudinaryImgPublicID(uploadedPic?.public_id); 
         }
         catch(err){
-            toast.error(err.response.data.message); 
+            toast.error(err?.response?.data?.message); 
             console.log(err); 
         }
     }
@@ -85,15 +93,21 @@ const SignUpPage = () => {
         
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, data)
         .then( (response) => {
+            
             toast.success(response?.data?.message); 
+
+            dispatch(setProfilePicPublicId(cloudinaryImgPublicID)); 
+
             imageInputRef.current.value = ''; 
             setUploadPic({});
+            setCloudinaryImgPublicID(''); 
             setData({
                 name : '',
                 email : '',
                 password : '',
                 profile_pic : ''
             });    
+            
             navigate('/login-email'); 
         })
         .catch( (err) => {
@@ -150,14 +164,16 @@ const SignUpPage = () => {
                     </div>
                     <div className='flex flex-col'>
                         <p className='text-lg text-white font-sans mx-2'>Profile Pic: </p>
-                        <label id='file-upload-label' htmlFor='profile_pic' className='h-14 w-72 max-width-72 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
+                        <label htmlFor='profile_pic' className='file-upload-label h-14 w-72 max-w-72 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
                             <p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden flex gap-2 justify-center items-center'> 
                                 {uploadPic?.name ? uploadPic.name : 'Click Here to Upload'} 
                                 {uploadPic?.name ? '' : <FaRegImage />}
                             </p>
-                            <button className='pl-1 pr-2' onClick={removePic}>
-                                {uploadPic?.name && <IoClose className='rounded-xl hover:bg-red-500 text-white' />} 
-                            </button>
+                            {uploadPic?.name && 
+                                <button className='pl-1 pr-2' onClick={removePic}>
+                                    <IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
+                                </button>
+                            }
                         </label>
                     
                         <input
@@ -170,7 +186,7 @@ const SignUpPage = () => {
                         />
                     </div>
                     <div className='flex justify-center items-center'>
-                        <button id='glow-button' type='submit' className='bg-blue-400 px-5 py-2 h-11 w-40 rounded-xl mt-5 mb-2 hover:bg-green-500 hover:text-black font-sans text-lg font-medium text-white'>Sign Up</button> 
+                        <button type='submit' className='glow-button bg-blue-400 px-5 py-2 h-11 w-40 rounded-xl mt-5 mb-2 hover:bg-green-500 hover:text-black font-sans text-lg font-medium text-white'>Sign Up</button> 
                     </div>
                 </form>
 

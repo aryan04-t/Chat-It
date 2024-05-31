@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { IoChatboxEllipses } from "react-icons/io5"
 import { FaUserPlus } from "react-icons/fa" 
 import { BiLogOut } from "react-icons/bi"
@@ -6,11 +6,14 @@ import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux' 
 
 import MiniAvatar from './MiniAvatar' 
+import EditUserDetails from './EditUserDetails'
 
 
 const Sidebar = () => {
   
     const user = useSelector(state => state.user); 
+    
+    const [editUserOpen, setEditUserOpen] = useState(false); 
 
     return (
 
@@ -35,7 +38,7 @@ const Sidebar = () => {
                 </div>
 
                 <div>
-                    <button className='miniavatartooltip'>
+                    <button className='miniavatartooltip' onClick={ () => setEditUserOpen(true) }> 
                         <span className='miniavatartooltiptext'>{user?.name}</span>
                         <MiniAvatar 
                             name = {user?.name}
@@ -54,6 +57,12 @@ const Sidebar = () => {
                 </div>
             </div>
 
+            {/* Edit User Details Component */} 
+            {
+                editUserOpen && (
+                    <EditUserDetails onClose={ () => setEditUserOpen(false) }  user={user} />
+                )
+            }
         </div>
     )
 }

@@ -36,15 +36,13 @@ const Home = () => {
 	} 
 
 	useEffect( () => {
-
-		if(user.name === ''){
+		if(user.token === ''){
 			navigate('/login-email'); 
 		}
 		else{
 			fetchUserDetails();
 		}
-
-	}, [])
+	})
 
 
 	const basePath = location.pathname === '/'; 

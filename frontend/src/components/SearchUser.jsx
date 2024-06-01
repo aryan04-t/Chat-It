@@ -38,7 +38,7 @@ const SearchUser = ({onClose, user}) => {
         };
     })
 
-    const searchDatabase = async (e) => {
+    const onSubmitSearchDatabase = async (e) => {
 
         setLoading(true); 
 
@@ -68,6 +68,43 @@ const SearchUser = ({onClose, user}) => {
             console.log(err); 
         })
     }
+    
+    
+    const searchDatabaseConstantly = async () => {
+
+        if(searchQuery === '') return;
+
+        setLoading(true); 
+
+        axios({ 
+            method : 'put', 
+            url : `${import.meta.env.VITE_BACKEND_URL}/api/user/get-user-search-result`, 
+            data : {searchQuery}, 
+            withCredentials : true 
+        })
+        .then( (response) => {
+            if(response?.data?.success){
+                setUserSearchResult(response?.data?.data);
+                setSearchDone(true); 
+                setLoading(false);
+                setSearchResultIsHidden(false);
+            }
+        })
+        .catch( (err) => {
+            toast.error(err?.response?.data?.message); 
+            if(err?.response?.data?.logout){
+				dispatch(logout()); 
+				navigate('/login-email'); 
+			}
+            console.log(err); 
+        })
+    }
+
+
+    useEffect( () => {
+        searchDatabaseConstantly();  
+    }, [searchQuery])
+
 
     const closeSearchResult = (e) => {
         setSearchResultIsHidden(true); 
@@ -88,7 +125,7 @@ const SearchUser = ({onClose, user}) => {
                         </button>
                     </div>
                     
-                    <form className='flex mt-3' onSubmit={searchDatabase}>
+                    <form className='flex mt-3' onSubmit={onSubmitSearchDatabase}>
                         <input
                             type='text' 
                             id='search-bar' 
@@ -138,8 +175,8 @@ const SearchUser = ({onClose, user}) => {
                             userSearchResult.length !== 0 && searchDone && (
                                 
                                 <>
-                                    <button className='pl-1 absolute h-3.5 w-3.5 rounded-bl-lg top-0 right-0 mr-[39px] mt-[0.5px] z-20' onClick={ closeSearchResult } > 
-                                        <IoClose className='rounded-bl-lg text-black text-sm absolute top-0 right-0 bg-zinc-300 hover:bg-red-500' /> 
+                                    <button className='pl-1 absolute h-3.5 w-3.5 rounded-bl-lg rounded-tr-lg top-0 right-0 mr-[35px] mt-[0.5px] z-20' onClick={ closeSearchResult } > 
+                                        <IoClose className='rounded-bl-lg rounded-tr-lg text-black text-sm absolute top-0 right-0 bg-zinc-300 hover:bg-red-500' /> 
                                     </button>
                                     <p className='text-white px-4 py-2 text-sm rounded-lg cursor-pointer flex relative bg-zinc-950 hover:bg-green-600'> 
                                         {userSearchResult[0].name}

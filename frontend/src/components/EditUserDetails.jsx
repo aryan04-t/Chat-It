@@ -169,7 +169,7 @@ const EditUserDetails = ({onClose, user}) => {
 			<div className='bg-zinc-800 w-full max-w-[400px] rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center'>
 
 				<div className='w-full flex justify-end'>
-					<button className='pl-1 pr-2' onClick={onClose}>
+					<button className='ml-1 mr-2' onClick={onClose}>
 						<IoClose className='rounded-xl hover:bg-red-500 text-white text-lg' /> 
 					</button>
 				</div>

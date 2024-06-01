@@ -37,7 +37,8 @@ const EditUserDetails = ({onClose, user}) => {
 
 	const [data, setData] = useState({
 		name : user?.name, 
-		profile_pic : user?.profile_pic  
+		profile_pic : user?.profile_pic,
+		cloudinary_img_public_id : user?.cloudinary_img_public_id  
 	})
 
 	const handleChange = (e) => {
@@ -62,12 +63,13 @@ const EditUserDetails = ({onClose, user}) => {
         try{
             const uploadedPic = await uploadFile(pic); 
 
-            setData({
-                ...data,
-                profile_pic : uploadedPic?.secure_url 
-            })
-            
 			setCloudinaryImgPublicID(uploadedPic?.public_id); 
+            
+			setData({
+                ...data,
+                profile_pic : uploadedPic?.secure_url, 
+				cloudinary_img_public_id : uploadedPic?.public_id
+            })
         }
         catch(err){
             toast.error(err.response.data.message); 
@@ -79,12 +81,13 @@ const EditUserDetails = ({onClose, user}) => {
         e.preventDefault();
         e.stopPropagation(); 
 
-        if(data.profile_pic !== ''){
+        if(data.profile_pic !== user?.profile_pic){
             imageInputRef.current.value = ''; 
             setUploadPic({});
             setData({
                 ...data,
-                profile_pic : user?.profile_pic 
+                profile_pic : user?.profile_pic,
+				cloudinary_img_public_id : user?.cloudinary_img_public_id 
             })
         }
 
@@ -107,7 +110,7 @@ const EditUserDetails = ({onClose, user}) => {
         e.preventDefault();
         e.stopPropagation(); 
 
-		if(user?.name == data?.name && user?.profile_pic == data?.profile_pic){
+		if(user?.name === data?.name && user?.profile_pic === data?.profile_pic){
 			toast.error('Please provide some new details for updating your profile');
 			toast.error('your current given input matches with your already existing details');
 			return; 
@@ -199,8 +202,8 @@ const EditUserDetails = ({onClose, user}) => {
 							<MiniAvatar 
 								name = {data?.name}
 								secureImageURL = {data?.profile_pic}
-								height = {50}
-								width = {50}
+								height = {48}
+								width = {48}
 							/>
 
 							<label htmlFor='profile_pic' className='file-upload-label h-14 w-56 max-w-56 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer ml-3'>

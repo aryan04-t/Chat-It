@@ -23,7 +23,8 @@ const SignUpPage = () => {
         name : '',
         email : '',
         password : '',
-        profile_pic : ''
+        profile_pic : '',
+        cloudinary_img_public_id : ''
     }); 
 
     const [uploadPic, setUploadPic] = useState({}); 
@@ -46,12 +47,13 @@ const SignUpPage = () => {
         try{
             const uploadedPic = await uploadFile(pic); 
     
-            setData({
-                ...data,
-                profile_pic : uploadedPic?.secure_url 
-            })
-
             setCloudinaryImgPublicID(uploadedPic?.public_id); 
+
+            setData({
+                ...data, 
+                profile_pic : uploadedPic?.secure_url, 
+                cloudinary_img_public_id : uploadedPic?.public_id 
+            })
         }
         catch(err){
             toast.error(err?.response?.data?.message); 
@@ -68,7 +70,8 @@ const SignUpPage = () => {
             setUploadPic({});
             setData({
                 ...data,
-                profile_pic : ''
+                profile_pic : '',
+                cloudinary_img_public_id : ''
             })
         }
 
@@ -105,7 +108,8 @@ const SignUpPage = () => {
                 name : '',
                 email : '',
                 password : '',
-                profile_pic : ''
+                profile_pic : '',
+                cloudinary_img_public_id : ''
             });    
             
             navigate('/login-email'); 

@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 
 import Avatar from '../components/Avatar.jsx';
 import { useDispatch } from 'react-redux';
-import { setToken } from '../redux/userSlice.js';
+import { setToken, setProfilePicPublicId } from '../redux/userSlice.js';
 
 
 const CheckPasswordLoginPage = () => {
@@ -46,6 +46,7 @@ const CheckPasswordLoginPage = () => {
 				
 				toast.success(response?.data?.message); 
 				
+				dispatch(setProfilePicPublicId(response?.data?.cloudinary_img_public_id)); 
 				dispatch(setToken(response?.data?.token));
 				localStorage.setItem('token', response?.data?.token); 
 				

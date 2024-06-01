@@ -19,6 +19,10 @@ const userSchema = new mongoose.Schema({
     profile_pic : {
         type : String, 
         default : ""
+    },
+    cloudinary_img_public_id : {
+        type : String,
+        default : ""
     }
 }, {
     timestamps : true

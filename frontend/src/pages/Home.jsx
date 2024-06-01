@@ -13,7 +13,7 @@ const Home = () => {
 
 	const dispatch = useDispatch(); 
 	const user = useSelector(state => state.user); 
-	
+
 	const navigate = useNavigate(); 
 	const location = useLocation(); 
 
@@ -37,13 +37,13 @@ const Home = () => {
 
 	useEffect( () => {
 		if(user.token === ''){
+			toast.error("Security logout"); 
 			navigate('/login-email'); 
 		}
 		else{
 			fetchUserDetails();
 		}
 	})
-
 
 	const basePath = location.pathname === '/'; 
 

@@ -12,6 +12,7 @@ export default {
       // primaryThemeColor-4 : "",  // bg-zinc-900 
       // primaryThemeColor-5 : "",  // bg-zinc-950 
 
+      // secondaryThemeColor0 : "",  // gray-300
       // secondaryThemeColor1 : "",  // bg-slate-600 
       
       // secondaryThemeColor2 : "",  // bg-red-500 

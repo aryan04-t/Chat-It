@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
 
+
 const CheckEmailLoginPage = () => {
 
 	const [email, setEmail] = useState(''); 

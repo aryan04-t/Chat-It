@@ -6,7 +6,7 @@ import generateTokenAndSetCookie from '../utils/generateTokenAndSetCookie.js';
 
 export const signup = async (req, res) => {
     try{
-        const {name, email, password, profile_pic} = req.body; 
+        const {name, email, password, profile_pic, cloudinary_img_public_id} = req.body; 
         const checkEmail = await userModel.findOne({email}); 
 
         if(checkEmail){
@@ -23,7 +23,8 @@ export const signup = async (req, res) => {
             name, 
             email,
             profile_pic, 
-            password : hashPassword
+            password : hashPassword,
+            cloudinary_img_public_id
         }
 
         const user = new userModel(payload); 
@@ -93,6 +94,7 @@ export const checkPasswordAndLogin = async (req, res) => {
                 return res.status(200).json({
                     message : 'Logged In successfully', 
                     token, 
+                    cloudinary_img_public_id : user.cloudinary_img_public_id, 
                     success : true
                 })
             }

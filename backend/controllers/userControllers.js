@@ -21,13 +21,14 @@ export const getUserDetails = (req, res) => {
 
 export const updateUserNameAndProfilePic = async (req, res) => {
     try{
-        const { name, profile_pic } = req.body; 
+        const { name, profile_pic, cloudinary_img_public_id } = req.body; 
         const user = req.user; 
         await userModel.updateOne({ _id : user._id}, {
             name, 
-            profile_pic
+            profile_pic, 
+            cloudinary_img_public_id 
         }); 
-        const updatedUserInformation = await userModel.findById(user._id).select('-password'); 
+        const updatedUserInformation = await userModel.findById(user._id).select('-password').select('-cloudinary_img_public_id'); 
         return res.status(200).json({
             message : "User's profile details got updated successfully",
             data : updatedUserInformation, 

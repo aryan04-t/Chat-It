@@ -30,6 +30,7 @@ export const userSlice = createSlice({
             state.name = '',
             state.email = '',
             state.profile_pic = '',
+            state.profile_pic_public_id = '',
             state.token = ''
         }
     }

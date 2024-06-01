@@ -8,7 +8,6 @@ import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import UserCard from './UserCard.jsx' 
-import MiniAvatar from './MiniAvatar'
 
 import { logout } from '../redux/userSlice.js'
 

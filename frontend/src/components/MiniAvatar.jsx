@@ -21,7 +21,11 @@ const MiniAvatar = ({name, secureImageURL, height, width}) => {
         'bg-lime-400',
         'bg-green-400',
         'bg-emerald-400',
-        'bg-purple-400',
+        'bg-purple-400', 
+        'bg-blue-400', 
+        'bg-red-400',
+        'bg-orange-400',
+        'bg-yellow-400',
     ]
 
     const randomNumber = Math.floor(Math.random() * 5);
@@ -39,7 +43,7 @@ const MiniAvatar = ({name, secureImageURL, height, width}) => {
                         width={width}
                     />
                 ) : name ? (
-                        <div className={`ml-1 mb-2 overflow-hidden h-10 w-10 rounded-full text-md flex items-center justify-center font-serif cursor-pointer select-none ${randomBgColour[randomNumber]}`}>
+                        <div className={`ml-1 overflow-hidden h-10 w-10 rounded-full text-md flex items-center justify-center font-serif cursor-pointer select-none ${randomBgColour[randomNumber]}`}>
                             {miniAvatarName}
                         </div>
                     ) : (

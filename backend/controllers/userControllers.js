@@ -54,7 +54,7 @@ export const getAllMatchingUsers = async (req, res) => {
                 { name : query },
                 { email : query }
             ]
-        })
+        }).select('-password'); 
 
         const user = req.user; 
 

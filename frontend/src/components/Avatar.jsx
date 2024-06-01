@@ -28,7 +28,7 @@ const Avatar = ({name, secureImageURL, height, width}) => {
 
     return(
 
-        <div className="flex flex-col justify-center items-center">
+        <div className="flex flex-col justify-center items-center select-none">
             {
                 secureImageURL ? (
                     <img 

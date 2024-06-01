@@ -42,3 +42,37 @@ export const updateUserNameAndProfilePic = async (req, res) => {
         })
     }
 }
+
+
+export const getAllMatchingUsers = async (req, res) => {
+    try{
+        const {searchQuery} = req.body; 
+        const query = new RegExp(searchQuery, 'i', 'g'); 
+
+        const allUser = await userModel.find({
+            '$or' : [
+                { name : query },
+                { email : query }
+            ]
+        })
+
+        const user = req.user; 
+
+        const result = allUser.filter( (currUser) => {
+            return currUser.email !== user.email; 
+        })
+
+        return res.status(200).json({
+            message : 'Search result of all matched users',
+            data : result,
+            success : true 
+        }) 
+    }
+    catch(err){
+        console.log(`Error occured while fetching details of other user's expcet the loggedin user: ${err.message}`); 
+        return res.status(500).json({
+            message : 'Internal server error',
+            error : true
+        })
+    }
+}

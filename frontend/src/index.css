@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 
-.glow-button:hover, .file-upload-label:hover, form input:hover{
+.glow-button:hover, .file-upload-label:hover, form input:hover, form input:focus, #update-user-details-card {
     box-shadow: 0 0 15px #fff 
 }
 
@@ -81,4 +81,42 @@
 
 .miniavatartooltip:hover .miniavatartooltiptext {
     visibility: visible;
+}
+
+
+.scrollbar::-webkit-scrollbar{
+    width : 4px;
+}
+
+.scrollbar::-webkit-scrollbar-track{
+    @apply bg-zinc-700; 
+    border-radius: 10px;
+}
+
+.scrollbar::-webkit-scrollbar-thumb{
+    background-color: white;
+    border-radius: 10px;
+}
+
+
+
+@media screen and (min-width: 1025px){   
+    #search-user-bar-container {
+        left: 55%;
+        top: 11%;
+    }
+}
+
+.centered-search-bar-around {
+    position: absolute;
+    left: 50%;
+    top: 20%;
+    transform: translate(-50%, -50%);
+}
+
+.centered-axis-xy {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
 }

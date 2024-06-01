@@ -1,5 +1,4 @@
-import React, { useRef } from 'react'
-import { useState } from 'react' 
+import React, { useState, useRef, useEffect } from 'react'
 import { IoClose } from "react-icons/io5"
 import { FaRegImage } from "react-icons/fa6"
 import { useNavigate } from 'react-router-dom'
@@ -15,6 +14,23 @@ import MiniAvatar from './MiniAvatar'
 
 const EditUserDetails = ({onClose, user}) => {
 	
+	const updateUserDetailsCardRef = useRef(); 
+    
+    useEffect( () => {
+        
+        const handler = (e) => {
+            if(!updateUserDetailsCardRef.current.contains(e.target)){
+                onClose(); 
+            }
+        }
+
+        document.addEventListener('mousedown', handler); 
+
+        return () => {
+            document.removeEventListener('mousedown', handler);
+        };
+    })
+
     const imageInputRef = useRef();	
 	const dispatch = useDispatch(); 
 	const navigate = useNavigate(); 
@@ -147,9 +163,10 @@ const EditUserDetails = ({onClose, user}) => {
 		})
     }
 
+
   	return (
-		<div className='fixed top-0 bottom-0 left-0 right-0 bg-white bg-opacity-40 flex justify-center items-center select-none'> 
-			<div className='bg-zinc-800 w-full max-w-[400px] rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
+		<div id='update-user-details-card' ref={updateUserDetailsCardRef} className='fixed centered-axis-xy flex justify-center items-center select-none rounded-2xl z-10' > 
+			<div className='bg-zinc-800 w-full max-w-[400px] rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center'>
 
 				<div className='w-full flex justify-end'>
 					<button className='pl-1 pr-2' onClick={onClose}>

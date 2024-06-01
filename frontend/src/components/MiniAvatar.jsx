@@ -34,16 +34,16 @@ const MiniAvatar = ({name, secureImageURL, height, width}) => {
                     <img 
                         src={secureImageURL} 
                         alt="User Profile Pic" 
-                        className='ml-1 rounded-full overflow-hidden'
+                        className='ml-1 rounded-full overflow-hidden select-none'
                         height={height}
                         width={width}
                     />
                 ) : name ? (
-                        <div className={`ml-1 mb-2 overflow-hidden h-10 w-10 rounded-full text-md flex items-center justify-center font-serif cursor-pointer ${randomBgColour[randomNumber]}`}>
+                        <div className={`ml-1 mb-2 overflow-hidden h-10 w-10 rounded-full text-md flex items-center justify-center font-serif cursor-pointer select-none ${randomBgColour[randomNumber]}`}>
                             {miniAvatarName}
                         </div>
                     ) : (
-                        <FaUser className='text-4xl border-white border-4 ml-[5.5px] mb-2 bg-white rounded-full' />
+                        <FaUser className='text-4xl border-white border-4 ml-[5.5px] mb-2 bg-white rounded-full select-none' />
                     )
             }
         </>

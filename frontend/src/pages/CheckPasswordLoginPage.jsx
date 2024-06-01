@@ -50,7 +50,7 @@ const CheckPasswordLoginPage = () => {
 				localStorage.setItem('token', response?.data?.token); 
 				
 				setPassword(''); 
-				navigate(`/${location?.state?._id}`); 
+				navigate('/'); 
 			}
 		})
 		.catch( (err) => {

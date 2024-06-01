@@ -4,9 +4,11 @@ import { FaUserPlus } from "react-icons/fa"
 import { BiLogOut } from "react-icons/bi"
 import { NavLink } from 'react-router-dom'
 import { useSelector } from 'react-redux' 
+import { IoArrowUndoSharp } from "react-icons/io5";
 
 import MiniAvatar from './MiniAvatar' 
 import EditUserDetails from './EditUserDetails'
+import SearchUser from './SearchUser'
 
 
 const Sidebar = () => {
@@ -14,12 +16,14 @@ const Sidebar = () => {
     const user = useSelector(state => state.user); 
     
     const [editUserOpen, setEditUserOpen] = useState(false); 
+    const [searchUserOpen, setSearchUserOpen] = useState(false); 
+    const [allUser, setAllUser] = useState([]); 
 
     return (
 
-        <div className='bg-zinc-700 w-full h-full'>
+        <div className='bg-zinc-700 w-full h-full grid grid-cols-[48px,1fr] lg:rounded-tr-2xl'>
 
-            <div className='bg-zinc-900 w-12 h-full rounded-tr-xl rounded-br-xl pt-8 pb-4 flex flex-col justify-between'> 
+            <div className='bg-zinc-900 w-12 h-full rounded-tr-xl pt-5 pb-2 flex flex-col justify-between'> 
                 <div className='flex flex-col gap-1.5'>
                     <NavLink className={ ({isActive}) => `tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-sky-500 rounded-tr-lg rounded-br-lg ${isActive && 'bg-green-400'}` }> 
                         <span className='tooltiptext'> Chats </span>
@@ -28,7 +32,7 @@ const Sidebar = () => {
                             size={22}
                         />
                     </NavLink>
-                    <div className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-sky-500 rounded-tr-lg rounded-br-lg pl-0.5'>
+                    <div onClick={ () => setSearchUserOpen(true) } className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-sky-500 rounded-tr-lg rounded-br-lg pl-0.5'>
                         <span className='tooltiptext'> Add Friend </span>
                         <FaUserPlus  
                             className='text-white ml-3 mt-3.5'
@@ -57,12 +61,51 @@ const Sidebar = () => {
                 </div>
             </div>
 
+            <div className='h-full w-full bg-transparent'>
+                <div className='flex pl-8 font-serif items-center h-16 font-bold'>
+                    <h1 className='text-xl font-semibold text-white pt-1 select-none'> Chats </h1>
+                </div>
+                <div className='bg-zinc-500 h-[calc(100vh-64px)] rounded-tr-2xl overflow-x-hidden overflow-y-auto scrollbar'>
+                    {
+                        allUser.length === 0 ? (
+                            <div>
+                                <div className='h-20 flex justify-center items-end rotate-12'>
+                                    <IoArrowUndoSharp 
+                                        size={50}
+                                        className='text-zinc-900'
+                                    />
+                                </div>
+                                <p className='text-lg font-serif text-white text-center mt-5 font-medium'>
+                                    Explore users to start a <br/> conversation with. 
+                                </p>
+                            </div>
+                        ) : (
+                            allUser.map( (ele, key) => {
+                                return(
+                                    <div>
+                                        
+                                    </div>
+                                )
+                            })
+                        )
+                    }
+                </div>
+            </div>
+
             {/* Edit User Details Component */} 
             {
                 editUserOpen && (
                     <EditUserDetails onClose={ () => setEditUserOpen(false) }  user={user} />
                 )
             }
+
+            {/* Search User */} 
+            {
+                searchUserOpen && (
+                    <SearchUser onClose={ () => setSearchUserOpen(false) } user={user} /> 
+                )
+            }
+
         </div>
     )
 }

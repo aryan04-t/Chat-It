@@ -98,11 +98,12 @@ const SearchUser = ({onClose, user}) => {
         })
         .catch( (err) => {
             toast.error(err?.response?.data?.message); 
-            console.log(err); 
+            setLoading(false);
             if(err?.response?.data?.logout){
-				dispatch(logout()); 
+                dispatch(logout()); 
 				navigate('/login-email'); 
 			}
+            console.log(err); 
         })
     }
 

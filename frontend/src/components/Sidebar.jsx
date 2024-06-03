@@ -43,7 +43,7 @@ const Sidebar = () => {
 
                 <div>
                     <button className='miniavatartooltip' onClick={ () => setEditUserOpen(true) }> 
-                        <span className='miniavatartooltiptext'>{user?.name}</span>
+                        <span style={{width : 'auto', whiteSpace : 'nowrap', padding : '5px', minWidth : '100px', backgroundColor : 'black'}} className='miniavatartooltiptext'> {user?.name} </span>
                         <MiniAvatar 
                             name = {user?.name}
                             secureImageURL = {user?.profile_pic}

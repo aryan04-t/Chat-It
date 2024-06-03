@@ -1,6 +1,7 @@
-import React, { useRef, useState }  from 'react'
+import React, { useRef, useState, useEffect }  from 'react'
 import { IoClose } from "react-icons/io5";
 import { FaRegImage } from "react-icons/fa6";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
@@ -8,14 +9,14 @@ import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfilePicPublicId } from '../redux/userSlice';
 
-import uploadFile from '../helpers/uploadFile';
+import uploadFile from '../helpers/uploadFile'; 
+import validateInputFields from '../helpers/validateInputFields';
 
 
 const SignUpPage = () => {
     
-    
-    const imageInputRef = useRef();
-    
+    const imageInputRef = useRef(); 
+
     const user = useSelector(state => state.user); 
     const dispatch = useDispatch(); 
  
@@ -31,15 +32,14 @@ const SignUpPage = () => {
     const [cloudinaryImgPublicID, setCloudinaryImgPublicID] = useState(''); 
     const navigate = useNavigate(); 
 
-    const handleFormInput = (e) => {
-        const {name, value} = e.target; 
-        setData({...data, [name] : value}); 
-    } 
+    const [imageUploadOrDeleteLoading, setImageUploadOrDeleteLoading] = useState(false); 
 
     const handleUploadPic = async (e) => {
+        
         e.preventDefault(); 
         e.stopPropagation(); 
 
+        setImageUploadOrDeleteLoading(true); 
         const pic = e.target.files[0]; 
 
         setUploadPic(pic); 
@@ -54,16 +54,22 @@ const SignUpPage = () => {
                 profile_pic : uploadedPic?.secure_url, 
                 cloudinary_img_public_id : uploadedPic?.public_id 
             })
+
+            setImageUploadOrDeleteLoading(false); 
         }
         catch(err){
             toast.error(err?.response?.data?.message); 
+            setImageUploadOrDeleteLoading(false); 
             console.log(err); 
         }
     }
 
     const removePic = async (e) => {
+
         e.preventDefault();
         e.stopPropagation(); 
+        
+        setImageUploadOrDeleteLoading(true);
 
         if(data.profile_pic !== ''){
             imageInputRef.current.value = ''; 
@@ -82,10 +88,12 @@ const SignUpPage = () => {
                 })
                 setCloudinaryImgPublicID(''); 
                 toast.success(response?.data?.message); 
+                setImageUploadOrDeleteLoading(false);
             }
         }
         catch(err){
             toast.error(err?.response?.data?.message); 
+            setImageUploadOrDeleteLoading(false);
             console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
         }
     }
@@ -120,63 +128,125 @@ const SignUpPage = () => {
         }) 
     }
         
+        
+    const [passwordVisible, setPasswordVisible] = useState(false); 
+    const eyeIcon = passwordVisible ? <FiEye onClick={ () => {setPasswordVisible(false)} } /> : <FiEyeOff onClick={ () => {setPasswordVisible(true)} } />; 
+    const passwordInputFieldType = passwordVisible ? 'text' : 'password'; 
+
+
+    const inputFieldCSS = 'px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'; 
+    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72'; 
+    const labelCSS = 'text-md text-white font-sans mx-2 cursor-pointer'; 
+
+    const [isNameErrorTextInvisible, setIsNameErrorTextInvisible] = useState(true);  
+    const [nameErrorText, setNameErrorText] = useState('Display Name Error Text'); 
+
+    const [isEmailErrorTextInvisible, setIsEmailErrorTextInvisible] = useState(true);  
+    const [emailErrorText, setEmailErrorText] = useState('Display Email Error Text'); 
+    
+    const [isPasswordErrorTextInvisible, setIsPasswordErrorTextInvisible] = useState(true);  
+    const [passwordErrorText, setPasswordErrorText] = useState('Display Password Error Text'); 
+
+    const handleFormInput = (e) => {
+        
+        const {name, value} = e.target;         
+        setData({...data, [name] : value}); 
+ 
+        validateInputFields(name, value, {
+            setIsNameErrorTextInvisible,
+            setNameErrorText,
+            setIsEmailErrorTextInvisible,
+            setEmailErrorText,
+            setIsPasswordErrorTextInvisible,
+            setPasswordErrorText
+        }); 
+    }
+
+
+    const [isSignUpButtonDisabled, setIsSignUpButtonDisabled] = useState(true); 
+
+    useEffect( () => {
+        if(isNameErrorTextInvisible && isEmailErrorTextInvisible && isPasswordErrorTextInvisible && !imageUploadOrDeleteLoading){
+            setIsSignUpButtonDisabled(false); 
+        }
+        else{
+            setIsSignUpButtonDisabled(true); 
+        }
+    }, [isEmailErrorTextInvisible, isNameErrorTextInvisible, isPasswordErrorTextInvisible, imageUploadOrDeleteLoading]); 
+
+
     return (
-        <div className='pt-5 pb-3 md:pt-8 md:pb-6 flex justify-center items-center select-none'>
+        <div className='pt-5 pb-3 md:pt-8 md:pb-5 flex justify-center items-center select-none'>
             <div className='bg-zinc-800 w-full max-w-sm rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
 
                 <h3 className='text-3xl text-yellow-200 font-serif mt-4'>Welcome to ChatIt</h3> 
             
-                <form onSubmit={handleFormSubmission} className='grid gap-4 mt-6'>
+                <form onSubmit={handleFormSubmission} className='grid gap-1 mt-6'>
                     <div className='flex flex-col'>
-                        <label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='name'>Name: </label>
+                        <label className={labelCSS} htmlFor='name'>Name: </label>
                         <input
                             type='text' 
                             id='name'
                             name='name'
                             placeholder='Enter your name'
-                            className='px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
+                            className={inputFieldCSS}
                             value={data.name}
                             onChange={handleFormInput}
                             required
                         />
+                        <p className={ inputFieldErrorMessageCSS + `${isNameErrorTextInvisible && ' invisible'}`}> {nameErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
-                        <label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='email'>Email: </label>
+                        <label className={labelCSS} htmlFor='email'>Email: </label>
                         <input
-                            type='email' 
+                            type='text' 
                             id='email'
                             name='email'
                             placeholder='Enter your email'
-                            className='px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
+                            className={inputFieldCSS}
                             value={data.email}
                             onChange={handleFormInput}
                             required
                         />
+                        <p className={inputFieldErrorMessageCSS + `${isEmailErrorTextInvisible && ' invisible'}`}> {emailErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
-                        <label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='password'>Password: </label>
-                        <input
-                            type='password' 
-                            id='password'
-                            name='password'
-                            placeholder='Enter your password'
-                            className='px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
-                            value={data.password}
-                            onChange={handleFormInput}
-                            required
-                        />
+                        <label className={labelCSS} htmlFor='password'>Password: </label>
+                        <div className='flex relative'>
+                            <input
+                                type={passwordInputFieldType} 
+                                id='password'
+                                name='password'
+                                placeholder='Enter your password'
+                                className='pl-2 pr-10 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
+                                value={data.password}
+                                onChange={handleFormInput}
+                                required
+                            />
+                            <span className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </span>
+                        </div>
+                        <p className={inputFieldErrorMessageCSS + `${isPasswordErrorTextInvisible && ' invisible'}`}> {passwordErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
-                        <p className='text-lg text-white font-sans mx-2'>Profile Pic: </p>
-                        <label htmlFor='profile_pic' className='file-upload-label h-14 w-72 max-w-72 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
-                            <p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden flex gap-2 justify-center items-center'> 
-                                {uploadPic?.name ? uploadPic.name : 'Click Here to Upload'} 
-                                {uploadPic?.name ? '' : <FaRegImage />}
-                            </p>
-                            {uploadPic?.name && 
-                                <button className='pl-1 pr-2' onClick={removePic}>
-                                    <IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
-                                </button>
+                        <p className='text-md text-white font-sans mx-2 mt-1.5'>Profile Pic: </p>
+                        <label htmlFor='profile_pic' className='file-upload-label h-14 w-72 max-w-72 bg-slate-600 rounded-xl mt-1 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
+                            {
+                                imageUploadOrDeleteLoading && 
+                                <div className="border-gray-300 h-8 w-8 animate-spin rounded-full border-2 border-t-blue-600" />
+                            }
+                            {
+                                !imageUploadOrDeleteLoading &&
+                                <>
+                                    <p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden flex gap-2 justify-center items-center'> 
+                                        {uploadPic?.name ? uploadPic.name : 'Click Here to Upload'} 
+                                        {uploadPic?.name ? '' : <FaRegImage />}
+                                    </p>
+                                    {uploadPic?.name && 
+                                        <button className='pl-1 pr-2' onClick={removePic}>
+                                            <IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
+                                        </button>
+                                    }       
+                                </>
                             }
                         </label>
                     
@@ -185,12 +255,15 @@ const SignUpPage = () => {
                             type='file' 
                             id='profile_pic'
                             name='profile_pic'
-                            className='pl-2 pr-1 focus:outline-blue-600 rounded-md mt-1 w-72 hidden'
+                            className='hidden'
                             onChange={handleUploadPic}
                         />
                     </div>
                     <div className='flex justify-center items-center'>
-                        <button type='submit' className='glow-button bg-blue-400 px-5 py-2 h-11 w-40 rounded-xl mt-5 mb-2 hover:bg-green-500 hover:text-black font-sans text-lg font-medium text-white'>Sign Up</button> 
+                        <button disabled={isSignUpButtonDisabled} type='submit' 
+                            className={ `${isSignUpButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-11 w-40 rounded-xl mt-6 mb-1` }>
+                            Sign Up
+                        </button> 
                     </div>
                 </form>
 

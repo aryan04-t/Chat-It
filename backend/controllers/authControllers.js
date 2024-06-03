@@ -52,7 +52,7 @@ export const checkEmailForLogin = async (req, res) => {
         const user = await userModel.findOne({email}).select("-password"); 
         if(user){
             return res.status(200).json({
-                message : "Email verified",
+                message : "User Verified",
                 success : true,
                 data : user
             }); 

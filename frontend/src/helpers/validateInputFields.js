@@ -111,12 +111,12 @@ const validateInputFields = (name, value, setters) => {
         const pieces = value.split("@"); 
         if(pieces[0].length < 6){
             setIsEmailErrorTextInvisible(false); 
-            setEmailErrorText("Gmail username should be at least 6 chars long"); 
+            setEmailErrorText("G-mail username should be at least 6 chars long"); 
             return; 
         }
         if(pieces[0].length > 30){
             setIsEmailErrorTextInvisible(false); 
-            setEmailErrorText("Gmail username cannot have more than 30 chars"); 
+            setEmailErrorText("G-mail username cannot have more than 30 chars"); 
             return; 
         }
         if(pieces.length === 1 && pieces[0].length === value.length){
@@ -142,12 +142,12 @@ const validateInputFields = (name, value, setters) => {
         if(pieces.length === 2 && pieces[1] === 'gmail.com'){
             if(pieces[0][0] === '.'){
                 setIsEmailErrorTextInvisible(false); 
-                setEmailErrorText("Gmail address are not allowed to start with '.'"); 
+                setEmailErrorText("G-mail address are not allowed to start with '.'"); 
                 return; 
             }
             else if(pieces[0][pieces[0].length-1] === '.'){
                 setIsEmailErrorTextInvisible(false); 
-                setEmailErrorText("Gmail address usernames cannot end with '.'"); 
+                setEmailErrorText("G-mail address usernames cannot end with '.'"); 
                 return; 
             }
         }
@@ -155,7 +155,7 @@ const validateInputFields = (name, value, setters) => {
             for(let i=0; i < pieces[0].length; i++){
                 if(isUpperCase(pieces[0][i])){
                     setIsEmailErrorTextInvisible(false); 
-                    setEmailErrorText("Gmail address don't have upper-case chars"); 
+                    setEmailErrorText("G-mail address don't have upper-case chars"); 
                     return; 
                 }
                 else if(!isLowerCase(pieces[0][i]) && !isNumber(pieces[0][i]) && pieces[0][i] !== '.'){

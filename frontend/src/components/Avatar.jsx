@@ -34,7 +34,7 @@ const Avatar = ({name, secureImageURL, height, width}) => {
                     <img 
                         src={secureImageURL} 
                         alt="User Profile Pic" 
-                        className='mt-4 mx-5 rounded-full overflow-hidden'
+                        className='mt-4 mx-5 rounded-full overflow-hidden border-2 border-white'
                         height={height}
                         width={width}
                     />

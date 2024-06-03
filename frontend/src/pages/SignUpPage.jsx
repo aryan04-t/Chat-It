@@ -7,7 +7,6 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { setProfilePicPublicId } from '../redux/userSlice';
 
 import uploadFile from '../helpers/uploadFile'; 
 import validateInputFields from '../helpers/validateInputFields';

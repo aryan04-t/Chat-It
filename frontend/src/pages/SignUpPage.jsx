@@ -107,8 +107,6 @@ const SignUpPage = () => {
             
             toast.success(response?.data?.message); 
 
-            dispatch(setProfilePicPublicId(cloudinaryImgPublicID)); 
-
             imageInputRef.current.value = ''; 
             setUploadPic({});
             setCloudinaryImgPublicID(''); 
@@ -127,16 +125,40 @@ const SignUpPage = () => {
             console.log(`Error occured while calling api for signing up user: ${err}`); 
         }) 
     }
+
+    const cleanUpFunction = async () => {
+
+        if(data.profile_pic !== ''){
+            imageInputRef.current.value = ''; 
+            setUploadPic({});
+            setData({
+                name : '',
+                email : '',
+                password : '',
+                profile_pic : '',
+                cloudinary_img_public_id : ''
+            });  
+        }
+
+        try{
+            if(cloudinaryImgPublicID !== ''){
+                await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
+                    public_id : cloudinaryImgPublicID
+                })
+                setCloudinaryImgPublicID(''); 
+            }
+        }
+        catch(err){
+            toast.error(err?.response?.data?.message); 
+            console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
+        }
+    }
         
-        
+    
     const [passwordVisible, setPasswordVisible] = useState(false); 
     const eyeIcon = passwordVisible ? <FiEye onClick={ () => {setPasswordVisible(false)} } /> : <FiEyeOff onClick={ () => {setPasswordVisible(true)} } />; 
     const passwordInputFieldType = passwordVisible ? 'text' : 'password'; 
 
-
-    const inputFieldCSS = 'px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'; 
-    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72'; 
-    const labelCSS = 'text-md text-white font-sans mx-2 cursor-pointer'; 
 
     const [isNameErrorTextInvisible, setIsNameErrorTextInvisible] = useState(true);  
     const [nameErrorText, setNameErrorText] = useState('Display Name Error Text'); 
@@ -175,15 +197,21 @@ const SignUpPage = () => {
     }, [isEmailErrorTextInvisible, isNameErrorTextInvisible, isPasswordErrorTextInvisible, imageUploadOrDeleteLoading]); 
 
 
+    const inputFieldCSS = 'px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'; 
+    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72'; 
+    const labelCSS = 'text-md text-white font-sans mx-2 cursor-pointer'; 
+
+
     return (
-        <div className='pt-5 pb-3 md:pt-8 md:pb-5 flex justify-center items-center select-none'>
+        <div className='pt-5 pb-3 md:pt-7 md:pb-3 flex justify-center items-center select-none'>
             <div className='bg-zinc-800 w-full max-w-sm rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
 
-                <h3 className='text-3xl text-yellow-200 font-serif mt-4'>Welcome to ChatIt</h3> 
+                <h3 className='text-3xl text-yellow-200 font-serif mt-2'>Welcome to ChatIt</h3> 
+                <h3 className='text-md text-white font-serif'> &#8226; Sign Up using G-mail</h3> 
             
-                <form onSubmit={handleFormSubmission} className='grid gap-1 mt-6'>
+                <form onSubmit={handleFormSubmission} className='grid gap-1 mt-5'>
                     <div className='flex flex-col'>
-                        <label className={labelCSS} htmlFor='name'>Name: </label>
+                        <label className={labelCSS} htmlFor='name'>Name <span className='text-red-600'>*</span> </label>
                         <input
                             type='text' 
                             id='name'
@@ -197,7 +225,7 @@ const SignUpPage = () => {
                         <p className={ inputFieldErrorMessageCSS + `${isNameErrorTextInvisible && ' invisible'}`}> {nameErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
-                        <label className={labelCSS} htmlFor='email'>Email: </label>
+                        <label className={labelCSS} htmlFor='email'>Email <span className='text-red-600'>*</span> </label>
                         <input
                             type='text' 
                             id='email'
@@ -211,7 +239,7 @@ const SignUpPage = () => {
                         <p className={inputFieldErrorMessageCSS + `${isEmailErrorTextInvisible && ' invisible'}`}> {emailErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
-                        <label className={labelCSS} htmlFor='password'>Password: </label>
+                        <label className={labelCSS} htmlFor='password'>Password <span className='text-red-600'>*</span> </label>
                         <div className='flex relative'>
                             <input
                                 type={passwordInputFieldType} 
@@ -228,7 +256,7 @@ const SignUpPage = () => {
                         <p className={inputFieldErrorMessageCSS + `${isPasswordErrorTextInvisible && ' invisible'}`}> {passwordErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
-                        <p className='text-md text-white font-sans mx-2 mt-1.5'>Profile Pic: </p>
+                        <p className='text-md text-white font-sans mx-2 mt-1.5'>Profile Pic </p>
                         <label htmlFor='profile_pic' className='file-upload-label h-14 w-72 max-w-72 bg-slate-600 rounded-xl mt-1 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
                             {
                                 imageUploadOrDeleteLoading && 
@@ -267,7 +295,7 @@ const SignUpPage = () => {
                     </div>
                 </form>
 
-                <p className='text-white my-2'>Already have an account? <Link to={'/login-email'} className='text-yellow-200 hover:text-green-400'> Login </Link> </p>
+                <p className='text-white my-2'>Already have an account? <Link to={'/login-email'} onClick={cleanUpFunction} className='text-yellow-200 hover:text-green-400'> Login </Link> </p>
             </div>
         </div>
     )

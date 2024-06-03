@@ -60,14 +60,18 @@ const validateInputFields = (name, value, setters) => {
                 return; 
             }
         }
-        if(isValid){
-            setIsNameErrorTextInvisible(true); 
-            setNameErrorText('Display Password Error Text'); 
-        }
-        else{
+        if(!isValid){
             setIsNameErrorTextInvisible(false); 
             setNameErrorText('Only alphabet letters and spaces are allowed');
+            return;
         }
+        if(value.length > 100){
+            setIsNameErrorTextInvisible(false); 
+            setNameErrorText('Name length cannot be more than 100 chars'); 
+            return; 
+        }
+        setIsNameErrorTextInvisible(true); 
+        setNameErrorText('Display Password Error Text');     
     }
     else if(name === 'email'){
         if(value === ''){
@@ -197,7 +201,12 @@ const validateInputFields = (name, value, setters) => {
             setIsPasswordErrorTextInvisible(false); 
             setPasswordErrorText('Password length should be at least 8 characters'); 
         }
-        else if(value.length >= 8){
+        else if(value.length > 100){
+            setIsPasswordErrorTextInvisible(false); 
+            setPasswordErrorText('Password length cannot be more than 100 chars'); 
+            return; 
+        }
+        else{
             setIsPasswordErrorTextInvisible(true); 
             setPasswordErrorText('Display password error text'); 
         }

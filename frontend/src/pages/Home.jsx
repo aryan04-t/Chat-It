@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser, logout } from '../redux/userSlice'
+import { setUser, setProfilePicPublicId } from '../redux/userSlice'
+
 import toast from 'react-hot-toast'
 
 import Sidebar from '../components/Sidebar'
 import favicon from '../assets/favicon.png'
+import performCompleteLogout from '../helpers/performCompleteLogout' 
 
 
 const Home = () => {
@@ -17,19 +19,20 @@ const Home = () => {
 	const navigate = useNavigate(); 
 	const location = useLocation(); 
 
-	const fetchUserDetails = async () => {
+	const fetchUserDetails = () => {
 		axios({
 			method : 'get', 
 			url : `${import.meta.env.VITE_BACKEND_URL}/api/user/details`, 
 			withCredentials : true 
 		})
 		.then( (response) => {
+			dispatch(setProfilePicPublicId(response?.data?.data?.cloudinary_img_public_id)); 
 			dispatch(setUser(response?.data?.data)); 
 		}) 
 		.catch( (err) => {
 			toast.error(err?.response?.data?.message); 
 			if(err?.response?.data?.logout){
-				dispatch(logout()); 
+				performCompleteLogout(dispatch); 
 				navigate('/login-email'); 
 			}
 		})
@@ -38,12 +41,13 @@ const Home = () => {
 	useEffect( () => {
 		if(user.token === ''){
 			toast.error("Security logout"); 
+			performCompleteLogout(dispatch); 
 			navigate('/login-email'); 
 		}
 		else{
 			fetchUserDetails();
 		}
-	})
+	}, []) 
 
 	const basePath = location.pathname === '/'; 
 

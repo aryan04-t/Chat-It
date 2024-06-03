@@ -8,7 +8,7 @@ import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { setUser, setProfilePicPublicId, logout } from '../redux/userSlice'
 
-import uploadFile from '../helpers/uploadFile';
+import uploadFile from '../helpers/uploadFile' 
 import MiniAvatar from './MiniAvatar' 
 
 
@@ -106,7 +106,7 @@ const EditUserDetails = ({onClose, user}) => {
         }
     }
 
-	const handleFormSubmission = async (e) => {
+	const handleFormSubmission = (e) => {
         e.preventDefault();
         e.stopPropagation(); 
 

@@ -1,10 +1,12 @@
-const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`; 
 import toast from "react-hot-toast";
 
 const uploadFile = async (file) => {
-
+    
     try{
+        const url = `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`; 
+        
         const formData = new FormData(); 
+        
         formData.append('file', file);
         formData.append('upload_preset', 'my-chat-app-files');           // Define cloudinary folder name in which upload should happen 
 

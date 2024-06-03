@@ -2,22 +2,32 @@ import React, { useState } from 'react'
 import { IoChatboxEllipses } from "react-icons/io5"
 import { FaUserPlus } from "react-icons/fa" 
 import { BiLogOut } from "react-icons/bi"
-import { NavLink } from 'react-router-dom'
-import { useSelector } from 'react-redux' 
+import { Link, NavLink, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux' 
 import { IoArrowUndoSharp } from "react-icons/io5";
+import toast from 'react-hot-toast'
 
 import MiniAvatar from './MiniAvatar' 
 import EditUserDetails from './EditUserDetails'
 import SearchUser from './SearchUser'
+import performCompleteLogout from '../helpers/performCompleteLogout'
 
 
 const Sidebar = () => {
   
     const user = useSelector(state => state.user); 
-    
+    const dispatch = useDispatch(); 
+    const navigate = useNavigate(); 
+
     const [editUserOpen, setEditUserOpen] = useState(false); 
     const [searchUserOpen, setSearchUserOpen] = useState(false); 
     const [allUser, setAllUser] = useState([]); 
+
+    const doLogout = () => {
+        toast.success('User Logged Out Succeffully'); 
+        performCompleteLogout(dispatch); 
+        navigate('/login-email'); 
+    }
 
     return (
 
@@ -51,7 +61,7 @@ const Sidebar = () => {
                             width = {40}
                         />
                     </button>
-                    <button className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-red-500 rounded-tr-lg rounded-br-lg pr-1.5'>
+                    <button onClick={doLogout} className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-red-500 rounded-tr-lg rounded-br-lg pr-1.5'>
                         <span className='tooltiptext'> Logout </span>
                         <BiLogOut 
                             className='text-white ml-2'

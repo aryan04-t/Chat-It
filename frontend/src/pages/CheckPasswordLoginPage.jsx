@@ -5,7 +5,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 
 import { useDispatch } from 'react-redux';
-import { setToken, setProfilePicPublicId } from '../redux/userSlice.js';
+import { setToken } from '../redux/userSlice.js';
 
 import Avatar from '../components/Avatar.jsx';
 import validateInputFields from '../helpers/validateInputFields.js';
@@ -26,7 +26,7 @@ const CheckPasswordLoginPage = () => {
 		}
 	}, []) 
 
-	const handleFormSubmission = async (e) => {
+	const handleFormSubmission = (e) => {
 		e.preventDefault();
 		e.stopPropagation(); 
 		
@@ -44,8 +44,7 @@ const CheckPasswordLoginPage = () => {
 				
 				toast.success(response?.data?.message); 
 				
-				dispatch(setProfilePicPublicId(response?.data?.cloudinary_img_public_id)); 
-				dispatch(setToken(response?.data?.token));
+				dispatch(setToken(response?.data?.token)); 
 				localStorage.setItem('token', response?.data?.token); 
 				
 				setPassword(''); 

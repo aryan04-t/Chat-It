@@ -28,7 +28,7 @@ export const updateUserNameAndProfilePic = async (req, res) => {
             profile_pic, 
             cloudinary_img_public_id 
         }); 
-        const updatedUserInformation = await userModel.findById(user._id).select('-password').select('-cloudinary_img_public_id'); 
+        const updatedUserInformation = await userModel.findById(user._id).select('-password'); 
         return res.status(200).json({
             message : "User's profile details got updated successfully",
             data : updatedUserInformation, 

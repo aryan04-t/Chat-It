@@ -12,7 +12,7 @@ const CheckEmailLoginPage = () => {
 	const [email, setEmail] = useState(''); 
 	const navigate = useNavigate(); 
 
-	const handleFormSubmission = async (e) => {
+	const handleFormSubmission = (e) => {
 		e.preventDefault();
 		e.stopPropagation(); 
 		

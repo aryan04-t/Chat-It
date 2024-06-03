@@ -40,7 +40,7 @@ const SearchUser = ({onClose, user}) => {
         };
     })
 
-    const onSubmitSearchDatabase = async (e) => {
+    const onSubmitSearchDatabase = (e) => {
 
         setLoading(true); 
 
@@ -72,7 +72,7 @@ const SearchUser = ({onClose, user}) => {
     }
     
     
-    const searchDatabaseConstantly = async () => {
+    const searchDatabaseConstantly = () => {
 
         if(searchQuery === ''){
             setSearchDone(false); 

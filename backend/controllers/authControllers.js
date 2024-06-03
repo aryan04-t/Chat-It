@@ -94,7 +94,6 @@ export const checkPasswordAndLogin = async (req, res) => {
                 return res.status(200).json({
                     message : 'Logged In successfully', 
                     token, 
-                    cloudinary_img_public_id : user.cloudinary_img_public_id, 
                     success : true
                 })
             }
@@ -125,13 +124,7 @@ export const checkPasswordAndLogin = async (req, res) => {
 
 export const logout = (req, res) => {
     try{
-        const cookieOptions =  {
-            maxAge : 0, 
-            httpOnly : true, 
-            sameSite : "strict", 
-            secure : true
-        };
-        res.cookie("jwt", "", cookieOptions); 
+        res.clearCookie('jwt'); 
         return res.status(200).json({
             message : "Successfully Logged Out the User", 
             success : true

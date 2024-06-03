@@ -6,8 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
 
-import { useDispatch, useSelector } from 'react-redux';
-
 import uploadFile from '../helpers/uploadFile'; 
 import validateInputFields from '../helpers/validateInputFields';
 
@@ -15,9 +13,6 @@ import validateInputFields from '../helpers/validateInputFields';
 const SignUpPage = () => {
     
     const imageInputRef = useRef(); 
-
-    const user = useSelector(state => state.user); 
-    const dispatch = useDispatch(); 
  
     const [data, setData] = useState({
         name : '',
@@ -97,7 +92,7 @@ const SignUpPage = () => {
         }
     }
     
-    const handleFormSubmission = async (e) => {
+    const handleFormSubmission = (e) => {
         e.preventDefault();
         e.stopPropagation(); 
         

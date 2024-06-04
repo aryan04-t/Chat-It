@@ -61,7 +61,7 @@ const Sidebar = () => {
                             width = {40}
                         />
                     </button>
-                    <button onClick={doLogout} className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-red-500 rounded-tr-lg rounded-br-lg pr-1.5'>
+                    <button onClick={doLogout} className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-red-500 rounded-tr-lg rounded-br-lg pr-1.5 mt-2'>
                         <span className='tooltiptext'> Logout </span>
                         <BiLogOut 
                             className='text-white ml-2'

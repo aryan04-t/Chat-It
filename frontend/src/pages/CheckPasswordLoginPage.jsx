@@ -88,7 +88,7 @@ const CheckPasswordLoginPage = () => {
 
 
 	return (
-		<div className='pt-5 pb-3 md:pt-8 md:pb-5 flex justify-center items-center select-none'>
+		<div className='pt-4 pb-3 md:pt-7 md:pb-4 flex justify-center items-center select-none'>
 			<div className='bg-zinc-800 w-full max-w-sm rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
 
 				<h3 className='text-2xl text-yellow-200 font-serif mt-2 text-center'>Enter Your Password For Logging In</h3> 
@@ -109,14 +109,14 @@ const CheckPasswordLoginPage = () => {
 								id='password'
 								name='password'
 								placeholder='Enter your password'
-								className='px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
+								className='pl-2 pr-10 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
 								value={password}
 								onChange={handlePasswordInput}
 								required
 							/>
-							<span className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </span>
+							<button className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </button>
 						</div>
-						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72' + `${isPasswordErrorTextInvisible && ' invisible'}`}> {passwordErrorText} </p> 
+						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72 mb-3 ' + `${isPasswordErrorTextInvisible && 'invisible'}`}> {passwordErrorText} </p> 
 					</div>
 					<div className='flex justify-center items-center'>
                         <button disabled={isLoginButtonDisabled} type='submit' 
@@ -125,7 +125,7 @@ const CheckPasswordLoginPage = () => {
                         </button> 
                     </div>
 				</form>
-				<p className='text-white mt-2 mb-2 text-center'> Forgot Password?? <Link to={'/forgot-password'} className='text-yellow-200 hover:text-green-400'> Click Here </Link> </p>
+				<p className='text-white mb-2 text-center'> Forgot Password?? <Link to={'/forgot-password'} className='text-yellow-200 hover:text-green-400'> Click Here </Link> </p>
 			</div>
 		</div>
 	)

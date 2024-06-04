@@ -56,13 +56,13 @@ const CheckEmailLoginPage = () => {
 
 
 	return (
-		<div className='pt-5 pb-3 md:pt-8 md:pb-6 flex justify-center items-center select-none'>
+		<div className='pt-5 pb-3 md:pt-8 md:pb-[18px] flex justify-center items-center select-none'>
 			<div className='bg-zinc-800 w-full max-w-sm rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
 
 				<h3 className='text-2xl text-yellow-200 font-serif mt-4 text-center'>Enter Your G-mail For <br/> Logging In </h3> 
 
-				<div className='mt-6 bg-white p-5 rounded-full'>
-					<FaUser className='text-[150px]' />
+				<div className='mt-8 bg-white p-5 rounded-full overflow-hidden'>
+					<FaUser className='text-[170px] h-[180px] w-[180px]' />
 				</div>
 
 				<form onSubmit={handleFormSubmission} className='grid gap-4 mt-3'>
@@ -78,11 +78,11 @@ const CheckEmailLoginPage = () => {
 							onChange={handleEmailInput}
 							required
 						/>
-						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72' + `${isEmailErrorTextInvisible && ' invisible'}`}> {emailErrorText} </p> 
+						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 mb-1 w-72 ' + `${isEmailErrorTextInvisible && 'invisible'}`}> {emailErrorText} </p> 
 					</div>
 					<div className='flex justify-center items-center'>
                         <button disabled={isVerifyUserButtonDisabled} type='submit' 
-                            className={ `${isVerifyUserButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-11 w-40 rounded-xl mb-2` }>
+                            className={ `${isVerifyUserButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-11 w-40 rounded-xl` }>
                             Verify User 
                         </button> 
                     </div>

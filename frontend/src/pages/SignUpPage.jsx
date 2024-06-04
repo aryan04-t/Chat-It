@@ -192,7 +192,7 @@ const SignUpPage = () => {
 
 
     const inputFieldCSS = 'px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'; 
-    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72'; 
+    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72 '; 
     const labelCSS = 'text-md text-white font-sans mx-2 cursor-pointer'; 
 
 
@@ -200,7 +200,7 @@ const SignUpPage = () => {
         <div className='pt-5 pb-3 md:pt-7 md:pb-3 flex justify-center items-center select-none'>
             <div className='bg-zinc-800 w-full max-w-sm rounded-2xl overflow-hidden p-4 flex flex-col justify-center items-center mx-5'>
 
-                <h3 className='text-3xl text-yellow-200 font-serif mt-2'>Welcome to ChatIt</h3> 
+                <h3 className='text-3xl text-yellow-200 font-serif mt-2'> Welcome to ChatIt </h3> 
                 <h3 className='text-md text-white font-serif'> &#8226; Sign Up using G-mail</h3> 
             
                 <form onSubmit={handleFormSubmission} className='grid gap-1 mt-5'>
@@ -216,7 +216,7 @@ const SignUpPage = () => {
                             onChange={handleFormInput}
                             required
                         />
-                        <p className={ inputFieldErrorMessageCSS + `${isNameErrorTextInvisible && ' invisible'}`}> {nameErrorText} </p>
+                        <p className={ inputFieldErrorMessageCSS + `${isNameErrorTextInvisible && 'invisible'}`}> {nameErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
                         <label className={labelCSS} htmlFor='email'>Email <span className='text-red-600'>*</span> </label>
@@ -230,7 +230,7 @@ const SignUpPage = () => {
                             onChange={handleFormInput}
                             required
                         />
-                        <p className={inputFieldErrorMessageCSS + `${isEmailErrorTextInvisible && ' invisible'}`}> {emailErrorText} </p>
+                        <p className={inputFieldErrorMessageCSS + `${isEmailErrorTextInvisible && 'invisible'}`}> {emailErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
                         <label className={labelCSS} htmlFor='password'>Password <span className='text-red-600'>*</span> </label>
@@ -245,9 +245,9 @@ const SignUpPage = () => {
                                 onChange={handleFormInput}
                                 required
                             />
-                            <span className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </span>
+                            <button className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </button>
                         </div>
-                        <p className={inputFieldErrorMessageCSS + `${isPasswordErrorTextInvisible && ' invisible'}`}> {passwordErrorText} </p>
+                        <p className={inputFieldErrorMessageCSS + `${isPasswordErrorTextInvisible && 'invisible'}`}> {passwordErrorText} </p>
                     </div>
                     <div className='flex flex-col'>
                         <p className='text-md text-white font-sans mx-2 mt-1.5'>Profile Pic </p>

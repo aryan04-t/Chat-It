@@ -26,10 +26,14 @@ const CheckPasswordLoginPage = () => {
 		}
 	}, []) 
 
+	const [loadingForFormSubmission, setLoadingForFormSubmission] = useState(false); 
+
 	const handleFormSubmission = (e) => {
 		e.preventDefault();
 		e.stopPropagation(); 
 		
+		setLoadingForFormSubmission(true); 
+
 		axios({
 			method : 'post', 
 			url : `${import.meta.env.VITE_BACKEND_URL}/api/auth/login/checkpassword`, 
@@ -46,21 +50,30 @@ const CheckPasswordLoginPage = () => {
 				
 				dispatch(setToken(response?.data?.token)); 
 				localStorage.setItem('token', response?.data?.token); 
-				
 				setPassword(''); 
+
+				setLoadingForFormSubmission(false); 
 				navigate('/'); 
 			}
 		})
 		.catch( (err) => {
 			toast.error(err?.response?.data?.message); 
+			setLoadingForFormSubmission(false); 
 			console.log(`Error occured while calling api for logging user in: ${err}`); 
 		}) 
 	}
 
 	    
-    const [passwordVisible, setPasswordVisible] = useState(false); 
-    const eyeIcon = passwordVisible ? <FiEye onClick={ () => {setPasswordVisible(false)} } /> : <FiEyeOff onClick={ () => {setPasswordVisible(true)} } />; 
+	const [passwordVisible, setPasswordVisible] = useState(false); 
+    const eyeIcon = passwordVisible ? <FiEye /> : <FiEyeOff />; 
     const passwordInputFieldType = passwordVisible ? 'text' : 'password'; 
+
+    const toggleEye = (e) => {
+        e.preventDefault(); 
+        e.stopPropagation(); 
+        passwordVisible ? setPasswordVisible(false) : setPasswordVisible(true); 
+    }
+
 
     const [isPasswordErrorTextInvisible, setIsPasswordErrorTextInvisible] = useState(true);  
     const [passwordErrorText, setPasswordErrorText] = useState('Display Password Error Text'); 
@@ -114,12 +127,12 @@ const CheckPasswordLoginPage = () => {
 								onChange={handlePasswordInput}
 								required
 							/>
-							<button className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </button>
+							<span onClick={toggleEye} className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </span>
 						</div>
 						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72 mb-3 ' + `${isPasswordErrorTextInvisible && 'invisible'}`}> {passwordErrorText} </p> 
 					</div>
 					<div className='flex justify-center items-center'>
-                        <button disabled={isLoginButtonDisabled} type='submit' 
+                        <button disabled={isLoginButtonDisabled || loadingForFormSubmission} type='submit' 
                             className={ `${isLoginButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-11 w-40 rounded-xl mb-2` }> 
                             Login 
                         </button> 

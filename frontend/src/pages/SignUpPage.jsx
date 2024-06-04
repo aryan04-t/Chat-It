@@ -95,6 +95,7 @@ const SignUpPage = () => {
     const [loadingForFormSubmission, setLoadingForFormSubmission] = useState(false); 
 
     const handleFormSubmission = (e) => {
+
         e.preventDefault();
         e.stopPropagation(); 
         
@@ -129,7 +130,7 @@ const SignUpPage = () => {
         
         if(imageUploadOrDeleteLoading){
             e.preventDefault();
-            toast.error('You cannot navigate away from SignUp page when profile pic is getting uploaded or deleted'); 
+            toast.error('You cannot navigate away from Sign Up page when profile pic is getting uploaded or deleted'); 
             return;
         }
         
@@ -161,8 +162,14 @@ const SignUpPage = () => {
         
     
     const [passwordVisible, setPasswordVisible] = useState(false); 
-    const eyeIcon = passwordVisible ? <FiEye onClick={ () => {setPasswordVisible(false)} } /> : <FiEyeOff onClick={ () => {setPasswordVisible(true)} } />; 
+    const eyeIcon = passwordVisible ? <FiEye /> : <FiEyeOff />; 
     const passwordInputFieldType = passwordVisible ? 'text' : 'password'; 
+
+    const toggleEye = (e) => {
+        e.preventDefault(); 
+        e.stopPropagation(); 
+        passwordVisible ? setPasswordVisible(false) : setPasswordVisible(true); 
+    }
 
 
     const [isNameErrorTextInvisible, setIsNameErrorTextInvisible] = useState(true);  
@@ -256,7 +263,7 @@ const SignUpPage = () => {
                                 onChange={handleFormInput}
                                 required
                             />
-                            <button className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </button>
+                            <span onClick={toggleEye} className='absolute top-2 right-4 cursor-pointer p-1 rounded-full'> {eyeIcon} </span>
                         </div>
                         <p className={inputFieldErrorMessageCSS + `${isPasswordErrorTextInvisible && 'invisible'}`}> {passwordErrorText} </p>
                     </div>
@@ -275,9 +282,9 @@ const SignUpPage = () => {
                                         {uploadPic?.name ? '' : <FaRegImage />}
                                     </p>
                                     {uploadPic?.name && 
-                                        <button disabled={loadingForFormSubmission} className={`pl-1 pr-2 ${loadingForFormSubmission ? 'invisible' : 'visible'}`} onClick={removePic}>
+                                        <span disabled={loadingForFormSubmission || imageUploadOrDeleteLoading} className={`ml-2 mr-2 ${loadingForFormSubmission ? 'invisible' : 'visible'}`} onClick={removePic}>
                                             <IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
-                                        </button>
+                                        </span>
                                     }       
                                 </>
                             }

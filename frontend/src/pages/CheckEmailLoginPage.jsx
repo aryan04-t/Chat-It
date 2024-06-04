@@ -12,9 +12,13 @@ const CheckEmailLoginPage = () => {
 	const [email, setEmail] = useState(''); 
 	const navigate = useNavigate(); 
 
+	const [loadingForFormSubmission, setLoadingForFormSubmission] = useState(false); 
+
 	const handleFormSubmission = (e) => {
 		e.preventDefault();
 		e.stopPropagation(); 
+
+		setLoadingForFormSubmission(true); 
 		
 		axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/login/checkemail`, {email})
 		.then( (response) => {
@@ -23,9 +27,11 @@ const CheckEmailLoginPage = () => {
 			navigate('/login-password', {
 				state : response?.data?.data 
 			}); 
+			setLoadingForFormSubmission(false);
 		})
 		.catch( (err) => {
 			toast.error(err?.response?.data?.message); 
+			setLoadingForFormSubmission(false);
 			console.log(`Error occured while calling api for verifying email: ${err}`); 
 		}) 
 	}
@@ -81,7 +87,7 @@ const CheckEmailLoginPage = () => {
 						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 mb-1 w-72 ' + `${isEmailErrorTextInvisible && 'invisible'}`}> {emailErrorText} </p> 
 					</div>
 					<div className='flex justify-center items-center'>
-                        <button disabled={isVerifyUserButtonDisabled} type='submit' 
+                        <button disabled={isVerifyUserButtonDisabled || loadingForFormSubmission} type='submit' 
                             className={ `${isVerifyUserButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-11 w-40 rounded-xl` }>
                             Verify User 
                         </button> 

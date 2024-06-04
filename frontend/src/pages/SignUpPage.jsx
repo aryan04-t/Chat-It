@@ -92,9 +92,13 @@ const SignUpPage = () => {
         }
     }
     
+    const [loadingForFormSubmission, setLoadingForFormSubmission] = useState(false); 
+
     const handleFormSubmission = (e) => {
         e.preventDefault();
         e.stopPropagation(); 
+        
+        setLoadingForFormSubmission(true); 
         
         axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, data)
         .then( (response) => {
@@ -116,12 +120,19 @@ const SignUpPage = () => {
         })
         .catch( (err) => {
             toast.error(err?.response?.data?.message); 
+            setLoadingForFormSubmission(false); 
             console.log(`Error occured while calling api for signing up user: ${err}`); 
         }) 
     }
-
-    const cleanUpFunction = async () => {
-
+    
+    const cleanUpFunction = async (e) => {
+        
+        if(imageUploadOrDeleteLoading){
+            e.preventDefault();
+            toast.error('You cannot navigate away from SignUp page when profile pic is getting uploaded or deleted'); 
+            return;
+        }
+        
         if(data.profile_pic !== ''){
             imageInputRef.current.value = ''; 
             setUploadPic({});
@@ -264,7 +275,7 @@ const SignUpPage = () => {
                                         {uploadPic?.name ? '' : <FaRegImage />}
                                     </p>
                                     {uploadPic?.name && 
-                                        <button className='pl-1 pr-2' onClick={removePic}>
+                                        <button disabled={loadingForFormSubmission} className={`pl-1 pr-2 ${loadingForFormSubmission ? 'invisible' : 'visible'}`} onClick={removePic}>
                                             <IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
                                         </button>
                                     }       
@@ -273,6 +284,7 @@ const SignUpPage = () => {
                         </label>
                     
                         <input
+                            disabled={imageUploadOrDeleteLoading || data.profile_pic !== ''}
                             ref={imageInputRef}
                             type='file' 
                             id='profile_pic'
@@ -282,7 +294,7 @@ const SignUpPage = () => {
                         />
                     </div>
                     <div className='flex justify-center items-center'>
-                        <button disabled={isSignUpButtonDisabled} type='submit' 
+                        <button disabled={isSignUpButtonDisabled || loadingForFormSubmission} type='submit' 
                             className={ `${isSignUpButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-11 w-40 rounded-xl mt-6 mb-1` }>
                             Sign Up
                         </button> 

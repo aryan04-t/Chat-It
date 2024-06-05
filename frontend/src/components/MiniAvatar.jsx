@@ -8,7 +8,7 @@ const MiniAvatar = ({name, secureImageURL, height, width}) => {
 
     if(name){
         const splitName = name.split(" "); 
-        if(splitName.length > 1){
+        if(splitName.length > 1 && splitName[1] !== ''){
             miniAvatarName = splitName[0][0] + splitName[1][0]; 
         }
         else{

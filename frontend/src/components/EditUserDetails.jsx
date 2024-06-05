@@ -11,6 +11,7 @@ import { setUser, setProfilePicPublicId, logout } from '../redux/userSlice'
 import uploadFile from '../helpers/uploadFile' 
 import MiniAvatar from './MiniAvatar' 
 import validateInputFields from '../helpers/validateInputFields'
+import LoadingSpinner from './LoadingSpinner'
 
 
 const EditUserDetails = ({onClose, user}) => {
@@ -42,6 +43,18 @@ const EditUserDetails = ({onClose, user}) => {
         try{
             const uploadedPic = await uploadFile(pic); 
 
+			if(uploadedPic?.error?.message){
+				imageInputRef.current.value = ''; 
+				setUploadPic({});
+				setData({
+					...data,
+					profile_pic : user?.profile_pic,
+					cloudinary_img_public_id : user?.cloudinary_img_public_id 
+				})
+                setImageUploadLoading(false); 
+                return; 
+            }
+
 			setCloudinaryImgPublicID(uploadedPic?.public_id); 
             
 			setData({
@@ -72,8 +85,8 @@ const EditUserDetails = ({onClose, user}) => {
             setUploadPic({});
             setData({
                 ...data,
-                profile_pic : user?.profile_pic,
-				cloudinary_img_public_id : user?.cloudinary_img_public_id 
+                profile_pic : user?.profile_pic || "",
+				cloudinary_img_public_id : user?.cloudinary_img_public_id || "" 
             })
         }
 
@@ -145,6 +158,7 @@ const EditUserDetails = ({onClose, user}) => {
 			}
 			dispatch(setUser(response?.data?.data)); 
 
+			toast.success("Now we're deleting your old profile pic from our database"); 
 			toast.success(response?.data?.message); 
 
 			if(userDidntHaveAProfilePicEarlierAndOrTheyHaventUploadedNewOne){
@@ -196,9 +210,20 @@ const EditUserDetails = ({onClose, user}) => {
     
     useEffect( () => {
         
-        const handler = (e) => {
+        const handler = async (e) => {
 			if(!updateUserDetailsCardRef.current.contains(e.target)){
 				if(!imageUploadLoading && !imageDeletionLoading && !loadingForUpdatesHappening){
+					if(cloudinaryImgPublicID !== ''){
+						axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
+							public_id : cloudinaryImgPublicID
+						})
+						.then( (response) => {
+							setCloudinaryImgPublicID(''); 
+						})
+						.catch( (err) => { 
+							console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
+						})
+					}
 					onClose(); 
 				}
 				else if(imageUploadLoading){
@@ -221,8 +246,19 @@ const EditUserDetails = ({onClose, user}) => {
     })
 
 
-	const closeUpdatesTab = () => {
+	const closeUpdatesTab = async (e) => {
 		if(!imageUploadLoading && !imageDeletionLoading && !loadingForUpdatesHappening){
+			if(cloudinaryImgPublicID !== ''){
+				axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
+					public_id : cloudinaryImgPublicID
+				})
+				.then( (response) => {
+					setCloudinaryImgPublicID(''); 
+				})
+				.catch( (err) => { 
+					console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
+				})
+			}
 			onClose(); 
 		}
 		else if(imageUploadLoading){
@@ -238,94 +274,96 @@ const EditUserDetails = ({onClose, user}) => {
 
 
   	return (
-		<div id='update-user-details-card' ref={updateUserDetailsCardRef} className='fixed centered-axis-xy flex justify-center items-center select-none rounded-2xl z-10' > 
-			<div className='bg-zinc-800 w-full max-w-[400px] rounded-2xl overflow-hidden p-2 flex flex-col justify-center items-center'>
+		<div className='fixed h-full w-full bg-transparent'>
+			<div id='update-user-details-card' ref={updateUserDetailsCardRef} className='fixed centered-axis-xy flex justify-center items-center select-none rounded-2xl z-10' > 
+				<div className='bg-zinc-800 w-full max-w-[400px] rounded-2xl overflow-hidden p-2 flex flex-col justify-center items-center'>
 
-				<div className='w-full flex justify-end'>
-					<button className='ml-1 mr-2' onClick={closeUpdatesTab}>
-						<IoClose className='rounded-xl hover:bg-red-500 text-white text-lg' /> 
-					</button>
-				</div>
-
-				<h1 className='text-3xl text-yellow-200 font-serif mt-5'> Edit Profile Details: </h1>
-
-				<form className='grid mt-7' onSubmit={handleFormSubmission}> 
-					
-					<div className='flex flex-col gap-1'>
-						<label htmlFor='name'  className='text-lg text-white font-sans mx-2 cursor-pointer'> Name: </label>
-						<input 
-							disabled={loadingForUpdatesHappening}
-							type='text' 
-							name='name' 
-							id='name' 
-							value={data.name} 
-							placeholder='Enter your new name here' 
-							onChange={handleChange} 
-							className='px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
-							required
-						/>
-						<p className={ 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72 ' + `${isNameErrorTextInvisible && 'invisible'}`}> {nameErrorText} </p>
+					<div className='w-full flex justify-end'>
+						<span disbale className='ml-1 mr-2' onClick={closeUpdatesTab}>
+							<IoClose className='rounded-xl hover:bg-red-500 text-white text-lg' /> 
+						</span>
 					</div>
-					
-					<div className='flex flex-col gap-1 mb-5 mt-3'>
-						<p className='text-lg text-white font-sans mx-2'> Profile Pic: </p>
+
+					<h1 className='text-3xl text-yellow-200 font-serif mt-5'> Edit Profile Details: </h1>
+
+					<form className='grid mt-7' onSubmit={handleFormSubmission}> 
 						
-						<div className='flex items-center mx-1.5'>
-							<MiniAvatar 
-								name = {data?.name}
-								secureImageURL = {data?.profile_pic}
-								height = {48}
-								width = {48}
-								/>
-
-							<label htmlFor='profile_pic' className='file-upload-label h-14 w-56 max-w-56 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer ml-3'>
-								{
-									(imageUploadLoading || imageDeletionLoading) && 
-									<div className="border-gray-300 h-8 w-8 animate-spin rounded-full border-2 border-t-blue-600" />
-								}
-								{
-									(!imageUploadLoading && !imageDeletionLoading) && 
-									<>
-										<p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden flex gap-2 justify-center items-center'> 
-											{uploadPic?.name ? uploadPic.name : 'Upload New Pic'} 
-											{uploadPic?.name ? '' : <FaRegImage />}
-										</p>
-										{uploadPic?.name && 
-											<button disabled={loadingForUpdatesHappening} className={`pl-1 pr-2 ${loadingForUpdatesHappening ? 'invisible' : 'visible'}`} onClick={removePic}>
-												<IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
-											</button>
-										}
-									</>
-								}
-							</label>
-
-							<input
-								disabled={loadingForUpdatesHappening || imageDeletionLoading || imageUploadLoading || (cloudinaryImgPublicID !== '')}
-								ref={imageInputRef}
-								type='file' 
-								id='profile_pic'
-								name='profile_pic'
-								className='hidden'
-								onChange={handleUploadPic}
+						<div className='flex flex-col gap-1'>
+							<label htmlFor='name'  className='text-lg text-white font-sans mx-2 cursor-pointer'> Name: </label>
+							<input 
+								disabled={loadingForUpdatesHappening}
+								type='text' 
+								name='name' 
+								id='name' 
+								value={data.name} 
+								placeholder='Enter your new name here' 
+								onChange={handleChange} 
+								className='px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'
+								required
 							/>
+							<p className={ 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72 ' + `${isNameErrorTextInvisible && 'invisible'}`}> {nameErrorText} </p>
 						</div>
-					</div>
+						
+						<div className='flex flex-col gap-1 mb-5 mt-3'>
+							<p className='text-lg text-white font-sans mx-2'> Profile Pic: </p>
+							
+							<div className='flex items-center mx-1.5'>
+								<MiniAvatar 
+									name = {data?.name}
+									secureImageURL = {data?.profile_pic}
+									height = {48}
+									width = {48}
+									/>
 
-					<div className='flex items-center justify-center'>
-                        <button disabled={isUpdateButtonDisabled} type='submit' className={`${isUpdateButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-19 w-40 rounded-xl mt-6 mb-4 flex justify-center items-center`}> 
-							{
-								loadingForUpdatesHappening && 
-								<div className="border-gray-300 h-8 w-8 animate-spin rounded-full border-2 border-t-blue-600" />
-							}
-							{
-								!loadingForUpdatesHappening && 
-								<p>
-									Update 
-								</p>
-							}
-						</button> 
-                    </div>
-				</form>
+								<label htmlFor='profile_pic' className='file-upload-label h-14 w-56 max-w-56 bg-slate-600 rounded-xl mt-0.5 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer ml-3'>
+									{
+										(imageUploadLoading || imageDeletionLoading) && 
+										<LoadingSpinner height={8} width={8} /> 
+									}
+									{
+										(!imageUploadLoading && !imageDeletionLoading) && 
+										<>
+											<p className='text-sm text-white font-sans max-width-[260] pl-3 overflow-hidden flex gap-2 justify-center items-center'> 
+												{uploadPic?.name ? uploadPic.name : 'Upload New Pic'} 
+												{uploadPic?.name ? '' : <FaRegImage />}
+											</p>
+											{uploadPic?.name && 
+												<span disabled={loadingForUpdatesHappening} className={`ml-2 mr-2 ${loadingForUpdatesHappening ? 'invisible' : 'visible'}`} onClick={removePic}>
+													<IoClose className='rounded-xl hover:bg-red-500 text-white' /> 
+												</span>
+											}
+										</>
+									}
+								</label>
+
+								<input
+									disabled={loadingForUpdatesHappening || imageDeletionLoading || imageUploadLoading || (cloudinaryImgPublicID !== '')}
+									ref={imageInputRef}
+									type='file' 
+									id='profile_pic'
+									name='profile_pic'
+									className='hidden'
+									onChange={handleUploadPic}
+								/>
+							</div>
+						</div>
+
+						<div className='flex items-center justify-center'>
+							<button disabled={isUpdateButtonDisabled || loadingForUpdatesHappening} type='submit' className={`${isUpdateButtonDisabled ? 'bg-red-400' : 'glow-button bg-blue-400 hover:bg-green-500 hover:text-black'} font-medium text-white font-sans text-lg px-5 py-2 h-19 w-40 rounded-xl mt-6 mb-4 flex justify-center items-center`}> 
+								{
+									loadingForUpdatesHappening && 
+									<LoadingSpinner height={8} width={8} />
+								}
+								{
+									!loadingForUpdatesHappening && 
+									<p>
+										Update 
+									</p>
+								}
+							</button> 
+						</div>
+					</form>
+				</div>
 			</div>
 		</div>
   	)

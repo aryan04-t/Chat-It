@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import UserCard from './UserCard.jsx' 
 
 import { logout } from '../redux/userSlice.js'
+import LoadingSpinner from './LoadingSpinner.jsx'
 
 
 const SearchUser = ({onClose, user}) => {
@@ -120,7 +121,7 @@ const SearchUser = ({onClose, user}) => {
 
 
     return (
-        <>
+        <div className='fixed h-full w-full bg-transparent'>
             <div id='search-user-bar-container' className='fixed centered-search-bar-around w-full max-w-sm z-10'>
                 <div className='relative w-[95%] max-w-sm mx-[2.5%] bg-zinc-700 mt-5 p-5 rounded-2xl' ref={searchBarCardRef}>
                     
@@ -145,7 +146,7 @@ const SearchUser = ({onClose, user}) => {
                         <button type='submit' className='-ml-[30px] mt-[1.2px] text-white hover:text-green-500 w-7 h-7 flex justify-center items-center rounded-full'>
                             {
                                 loading ? (
-                                    <div className="border-gray-300 h-5 w-5 animate-spin rounded-full border-2 border-t-blue-600" />
+                                    <LoadingSpinner height={5} width={5} />
                                 ) : (
                                     <FaSearch />
                                 )
@@ -196,7 +197,7 @@ const SearchUser = ({onClose, user}) => {
                 </div>
             </div>
 
-        </>
+        </div>
     )
 }
 

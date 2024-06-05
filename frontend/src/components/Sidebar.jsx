@@ -23,7 +23,29 @@ const Sidebar = () => {
     const [searchUserOpen, setSearchUserOpen] = useState(false); 
     const [allUser, setAllUser] = useState([]); 
 
-    const doLogout = () => {
+    const openEditUserDetailsTab = (e) => {
+        e.preventDefault();
+        e.stopPropagation(); 
+        setEditUserOpen(true);
+    }
+    
+    const closeEditUserDetailsTab = (e) => {
+        setEditUserOpen(false);
+    }
+    
+    const openUserSearchBar = (e) => {
+        e.preventDefault();
+        e.stopPropagation(); 
+        setSearchUserOpen(true);    
+    }
+
+    const closeUserSearchBar = (e) => {
+        setSearchUserOpen(false);     
+    }
+
+    const doLogout = (e) => {
+        e.preventDefault(); 
+        e.stopPropagation(); 
         toast.success('User Logged Out Succeffully'); 
         performCompleteLogout(dispatch); 
         navigate('/login-email'); 
@@ -42,7 +64,7 @@ const Sidebar = () => {
                             size={22}
                         />
                     </NavLink>
-                    <div onClick={ () => setSearchUserOpen(true) } className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-sky-500 rounded-tr-lg rounded-br-lg pl-0.5'>
+                    <div onClick={openUserSearchBar} className='tooltip w-12 h-12 flex items-center justify-center cursor-pointer hover:bg-sky-500 rounded-tr-lg rounded-br-lg pl-0.5'>
                         <span className='tooltiptext'> Add Friend </span>
                         <FaUserPlus  
                             className='text-white ml-3 mt-3.5'
@@ -52,7 +74,7 @@ const Sidebar = () => {
                 </div>
 
                 <div>
-                    <button className='miniavatartooltip' onClick={ () => setEditUserOpen(true) }> 
+                    <button className='miniavatartooltip' onClick={openEditUserDetailsTab}> 
                         <span style={{width : 'auto', whiteSpace : 'nowrap', padding : '5px', minWidth : '100px', backgroundColor : 'black'}} className='miniavatartooltiptext'> {user?.name} </span>
                         <MiniAvatar 
                             name = {user?.name}
@@ -105,14 +127,14 @@ const Sidebar = () => {
             {/* Edit User Details Component */} 
             {
                 editUserOpen && (
-                    <EditUserDetails onClose={ () => setEditUserOpen(false) }  user={user} />
+                    <EditUserDetails onClose={closeEditUserDetailsTab}  user={user} />
                 )
             }
 
             {/* Search User */} 
             {
                 searchUserOpen && (
-                    <SearchUser onClose={ () => setSearchUserOpen(false) } user={user} /> 
+                    <SearchUser onClose={closeUserSearchBar} user={user} /> 
                 )
             }
 

@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 
 import uploadFile from '../helpers/uploadFile'; 
 import validateInputFields from '../helpers/validateInputFields';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 
 const SignUpPage = () => {
@@ -40,7 +41,19 @@ const SignUpPage = () => {
         
         try{
             const uploadedPic = await uploadFile(pic); 
-    
+
+            if(uploadedPic?.error?.message){
+                imageInputRef.current.value = ''; 
+                setUploadPic({}); 
+                setData({
+                    ...data,
+                    profile_pic : '',
+                    cloudinary_img_public_id : ''
+                })
+                setImageUploadOrDeleteLoading(false); 
+                return; 
+            }
+
             setCloudinaryImgPublicID(uploadedPic?.public_id); 
 
             setData({
@@ -272,7 +285,7 @@ const SignUpPage = () => {
                         <label htmlFor='profile_pic' className='file-upload-label h-14 w-72 max-w-72 bg-slate-600 rounded-xl mt-1 border-2 border-slate-600 hover:border-blue-400 flex justify-center items-center cursor-pointer mx-2'>
                             {
                                 imageUploadOrDeleteLoading && 
-                                <div className="border-gray-300 h-8 w-8 animate-spin rounded-full border-2 border-t-blue-600" />
+                                <LoadingSpinner height={8} width={8} /> 
                             }
                             {
                                 !imageUploadOrDeleteLoading &&

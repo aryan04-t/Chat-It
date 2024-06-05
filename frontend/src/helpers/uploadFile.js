@@ -8,7 +8,7 @@ const uploadFile = async (file) => {
         const formData = new FormData(); 
         
         formData.append('file', file);
-        formData.append('upload_preset', 'my-chat-app-files');           // Define cloudinary folder name in which upload should happen 
+        formData.append('upload_preset', 'my-chat-app-profile-pics');           // Define cloudinary folder name in which upload should happen 
 
         const response = await fetch(url, {
             method : 'post',
@@ -17,11 +17,15 @@ const uploadFile = async (file) => {
 
         const responseData = await response.json(); 
 
-        if(responseData.public_id !== ''){
-            toast.success('Image uploaded successfully'); 
+        if(responseData?.error?.message){
+            toast.error('An error occured while uploading Profile Pic, Please try again'); 
+            return responseData;
         }
-
-        return responseData;
+        
+        if(responseData?.public_id !== ''){
+            toast.success('Image uploaded successfully'); 
+            return responseData;
+        }
     }
     catch(err){
         console.log(`Error occured while uploading file to cloudinary: ${err}`);

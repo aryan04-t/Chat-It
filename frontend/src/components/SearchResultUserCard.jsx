@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import MiniAvatar from './MiniAvatar'
 
 
-const UserCard = ({onClose, id, appUser}) => {
+const SearchResultUserCard = ({onClose, id, appUser}) => {
 
     const navigate = useNavigate(); 
 
@@ -35,4 +35,4 @@ const UserCard = ({onClose, id, appUser}) => {
     )
 }
 
-export default UserCard 
+export default SearchResultUserCard 

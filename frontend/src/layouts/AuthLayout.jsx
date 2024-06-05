@@ -1,10 +1,11 @@
 import React from 'react'
 import logo from '../assets/logo.png';
 
+
 const AuthLayout = ({children}) => {
   return (
     <>  
-      <header className="flex justify-center items-center py-3 h-23 shadow-md shadow-zinc-800 select-none bg-zinc-900">
+      <header className="flex justify-center items-center py-3 h-[71px] shadow-md shadow-zinc-800 select-none bg-zinc-900">
         <img 
           className='rounded-2xl'
           src={logo}
@@ -16,8 +17,9 @@ const AuthLayout = ({children}) => {
           ChatIt
         </p>
       </header>
-      
-      {children}
+      <section className='bg-zinc-900 min-h-[calc(100vh-71px)]'>
+        {children}
+      </section>
     </>
   )
 }

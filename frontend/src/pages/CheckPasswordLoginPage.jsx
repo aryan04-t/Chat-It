@@ -4,9 +4,6 @@ import { FiEye, FiEyeOff } from "react-icons/fi";
 import axios from 'axios'; 
 import toast from 'react-hot-toast';
 
-import { useDispatch } from 'react-redux';
-import { setToken } from '../redux/userSlice.js';
-
 import Avatar from '../components/Avatar.jsx';
 import validateInputFields from '../helpers/validateInputFields.js';
 
@@ -17,8 +14,6 @@ const CheckPasswordLoginPage = () => {
 
 	const navigate = useNavigate(); 
   	const location = useLocation(); 
-
-	const dispatch = useDispatch(); 
 
 	useEffect( () => {
 		if(!location?.state?.name){
@@ -47,9 +42,8 @@ const CheckPasswordLoginPage = () => {
 			if(response?.data?.success){
 				
 				toast.success(response?.data?.message); 
-				
-				dispatch(setToken(response?.data?.token)); 
-				localStorage.setItem('token', response?.data?.token); 
+
+				localStorage.setItem('jwt', response?.data?.token); 
 				setPassword(''); 
 
 				setLoadingForFormSubmission(false); 

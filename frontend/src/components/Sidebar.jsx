@@ -5,12 +5,11 @@ import { BiLogOut } from "react-icons/bi"
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux' 
 import { IoArrowUndoSharp } from "react-icons/io5";
-import toast from 'react-hot-toast'
 
 import MiniAvatar from './MiniAvatar' 
 import EditUserDetails from './EditUserDetails'
 import SearchUser from './SearchUser'
-import performCompleteLogout from '../helpers/performCompleteLogout'
+import intentionalLogoutOnUserRequest from '../helpers/intentionalLogoutOnUserRequest'
 
 
 const Sidebar = () => {
@@ -34,9 +33,9 @@ const Sidebar = () => {
     }
     
     const openUserSearchBar = (e) => {
-        e.preventDefault();
+        e.preventDefault(); 
         e.stopPropagation(); 
-        setSearchUserOpen(true);    
+        setSearchUserOpen(true); 
     }
 
     const closeUserSearchBar = (e) => {
@@ -46,8 +45,7 @@ const Sidebar = () => {
     const doLogout = (e) => {
         e.preventDefault(); 
         e.stopPropagation(); 
-        toast.success('User Logged Out Succeffully'); 
-        performCompleteLogout(dispatch); 
+        intentionalLogoutOnUserRequest(dispatch);
         navigate('/login-email'); 
     }
 

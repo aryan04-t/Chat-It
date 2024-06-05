@@ -8,7 +8,8 @@ import toast from 'react-hot-toast'
 
 import Sidebar from '../components/Sidebar'
 import favicon from '../assets/favicon.png'
-import performCompleteLogout from '../helpers/performCompleteLogout' 
+import sessionTimeOutLogout from '../helpers/sessionTimeOutLogout' 
+import securityLogout from '../helpers/securityLogout'
 
 
 const Home = () => {
@@ -18,6 +19,8 @@ const Home = () => {
 
 	const navigate = useNavigate(); 
 	const location = useLocation(); 
+
+	console.log(user); 
 
 	const fetchUserDetails = () => {
 		axios({
@@ -31,17 +34,18 @@ const Home = () => {
 		}) 
 		.catch( (err) => {
 			toast.error(err?.response?.data?.message); 
+			console.log(err); 
 			if(err?.response?.data?.logout){
-				performCompleteLogout(dispatch); 
+				sessionTimeOutLogout(dispatch); 
 				navigate('/login-email'); 
 			}
 		})
 	} 
 
 	useEffect( () => {
-		if(user.token === ''){
+		if(!localStorage.getItem('jwt')){ 
 			toast.error("Security logout"); 
-			performCompleteLogout(dispatch); 
+			securityLogout(dispatch); 
 			navigate('/login-email'); 
 		}
 		else{

@@ -12,6 +12,7 @@ import uploadFile from '../helpers/uploadFile'
 import MiniAvatar from './MiniAvatar' 
 import validateInputFields from '../helpers/validateInputFields'
 import LoadingSpinner from './LoadingSpinner'
+import sessionTimeOutLogout from '../helpers/sessionTimeOutLogout'
 
 
 const EditUserDetails = ({onClose, user}) => {
@@ -167,12 +168,12 @@ const EditUserDetails = ({onClose, user}) => {
 			}
 		}) 
 		.catch( (err) => {
-			console.log(err); 
 			toast.error(err?.response?.data?.message); 
 			setLoadingForUpdatesHappening(false);
 			onClose(); 
+			console.log(err); 
 			if(err?.response?.data?.logout){
-				dispatch(logout()); 
+				sessionTimeOutLogout(dispatch); 
 				navigate('/login-email'); 
 			}
 		})

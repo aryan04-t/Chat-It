@@ -7,10 +7,9 @@ import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import UserCard from './UserCard.jsx' 
-
-import { logout } from '../redux/userSlice.js'
+import SearchResultUserCard from './SearchResultUserCard.jsx' 
 import LoadingSpinner from './LoadingSpinner.jsx'
+import sessionTimeOutLogout from '../helpers/sessionTimeOutLogout.js'
 
 
 const SearchUser = ({onClose, user}) => {
@@ -61,14 +60,19 @@ const SearchUser = ({onClose, user}) => {
                 setLoading(false);
                 setSearchResultIsHidden(false);
             }
+            else{
+                setLoading(false);
+                toast.error('Internal Server Error, Search was Unsuccessfull'); 
+            }
         })
         .catch( (err) => {
             toast.error(err?.response?.data?.message); 
-            if(err?.response?.data?.logout){
-				dispatch(logout()); 
+            setLoading(false);
+            console.log(err); 
+			if(err?.response?.data?.logout){
+				sessionTimeOutLogout(dispatch); 
 				navigate('/login-email'); 
 			}
-            console.log(err); 
         })
     }
     
@@ -99,12 +103,12 @@ const SearchUser = ({onClose, user}) => {
         })
         .catch( (err) => {
             toast.error(err?.response?.data?.message); 
-            setLoading(false);
-            if(err?.response?.data?.logout){
-                dispatch(logout()); 
+            setLoading(false); 
+            console.log(err); 
+			if(err?.response?.data?.logout){
+				sessionTimeOutLogout(dispatch); 
 				navigate('/login-email'); 
 			}
-            console.log(err); 
         })
     }
 
@@ -185,7 +189,7 @@ const SearchUser = ({onClose, user}) => {
                                     {
                                         userSearchResult.map( (appUser, index) => {
                                             return(
-                                                <UserCard onClose={onClose} key={appUser._id} appUser={appUser}/>
+                                                <SearchResultUserCard onClose={onClose} key={appUser._id} appUser={appUser}/>
                                             )
                                         })
                                     }

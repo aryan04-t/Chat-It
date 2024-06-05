@@ -126,7 +126,7 @@ export const logout = (req, res) => {
     try{
         res.clearCookie('jwt'); 
         return res.status(200).json({
-            message : "Successfully Logged Out the User", 
+            message : "Logged Out Successfully", 
             success : true
         }); 
     }

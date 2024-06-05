@@ -75,7 +75,7 @@ const CheckEmailLoginPage = () => {
 					<div className='flex flex-col'>
 						<label className='text-lg text-white font-sans mx-2 cursor-pointer' htmlFor='email'>Email <span className='text-red-600'>*</span> </label>
 						<input
-							type='email' 
+							type='text' 
 							id='email'
 							name='email'
 							placeholder='Enter your email'

@@ -9,38 +9,66 @@ import MessagePage from '../components/MessagePage';
 import AuthLayout from '../layouts/AuthLayout';
 import ErrorPage from '../pages/ErrorPage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
+import GlobalToasterLayout from '../layouts/GlobalToasterLayout';
 
 
 // Routing using plain objects 
 const router = createBrowserRouter([
-
+    {
+        path : '/signup', 
+        element : (
+            <GlobalToasterLayout> 
+                <AuthLayout> 
+                    <SignUpPage /> 
+                </AuthLayout> 
+            </GlobalToasterLayout>
+        ),
+        errorElement : <ErrorPage />
+    },
+    {
+        path : '/login-email',
+        element : (
+            <GlobalToasterLayout> 
+                <AuthLayout> 
+                    <CheckEmailLoginPage /> 
+                </AuthLayout> 
+            </GlobalToasterLayout> 
+        ),
+        errorElement : <ErrorPage />
+    },
+    {
+        path : '/login-password',
+        element : (
+            <GlobalToasterLayout>
+                <AuthLayout> 
+                    <CheckPasswordLoginPage /> 
+                </AuthLayout>
+            </GlobalToasterLayout>
+        ),
+        errorElement : <ErrorPage />
+    },
+    {
+        path : '/forgot-password',
+        element : (
+            <GlobalToasterLayout>
+                <AuthLayout> 
+                    <ChangePasswordPage /> 
+                </AuthLayout>
+            </GlobalToasterLayout>
+        ), 
+        errorElement : <ErrorPage />
+    },
     {
         path : '/',
-        element : <App />,
+        element : (
+            <GlobalToasterLayout> 
+                <App /> 
+            </GlobalToasterLayout>
+        ),
         errorElement : <ErrorPage />,
         children : [
             {
-                path : 'signup', 
-                element : <AuthLayout> <SignUpPage /> </AuthLayout>,
-                errorElement : <ErrorPage />
-            },
-            {
-                path : 'login-email',
-                element : <AuthLayout> <CheckEmailLoginPage /> </AuthLayout>,
-                errorElement : <ErrorPage />
-            },
-            {
-                path : 'login-password',
-                element : <AuthLayout> <CheckPasswordLoginPage /> </AuthLayout>,
-                errorElement : <ErrorPage />
-            },
-            {
-                path : 'forgot-password',
-                element : <AuthLayout> <ChangePasswordPage /> </AuthLayout>, 
-                errorElement : <ErrorPage />
-            },
-            {
-                path : "",
+                path : '/',
                 element : <Home />,
                 errorElement : <ErrorPage />,
                 children : [
@@ -53,7 +81,6 @@ const router = createBrowserRouter([
             }
         ]
     }
-
 ]);
 
 

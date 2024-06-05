@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import SearchResultUserCard from './SearchResultUserCard.jsx' 
 import LoadingSpinner from './LoadingSpinner.jsx'
 import sessionTimeOutLogout from '../helpers/sessionTimeOutLogout.js'
+import securityLogout from '../helpers/securityLogout.js'
 
 
 const SearchUser = ({onClose, user}) => {
@@ -28,16 +29,23 @@ const SearchUser = ({onClose, user}) => {
     const searchResultContainerRef = useRef(); 
     
     useEffect( () => {
-        const handler = (e) => {
-            e.stopPropagation();
-            if(!searchBarCardRef.current.contains(e.target) && !searchResultContainerRef.current.contains(e.target)){
-                onClose(); 
+        if(!localStorage.getItem('jwt')){ 
+			toast.error("Security Logout"); 
+			securityLogout(dispatch); 
+			navigate('/login-email'); 
+		}
+		else{
+            const handler = (e) => {
+                e.stopPropagation();
+                if(!searchBarCardRef.current.contains(e.target) && !searchResultContainerRef.current.contains(e.target)){
+                    onClose(); 
+                }
             }
+            document.addEventListener('mousedown', handler); 
+            return () => {
+                document.removeEventListener('mousedown', handler);
+            };
         }
-        document.addEventListener('mousedown', handler); 
-        return () => {
-            document.removeEventListener('mousedown', handler);
-        };
     })
 
     const onSubmitSearchDatabase = (e) => {

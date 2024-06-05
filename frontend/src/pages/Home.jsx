@@ -44,7 +44,7 @@ const Home = () => {
 
 	useEffect( () => {
 		if(!localStorage.getItem('jwt')){ 
-			toast.error("Security logout"); 
+			toast.error("Security Logout"); 
 			securityLogout(dispatch); 
 			navigate('/login-email'); 
 		}

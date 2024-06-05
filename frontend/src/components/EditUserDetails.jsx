@@ -210,40 +210,46 @@ const EditUserDetails = ({onClose, user}) => {
 	const updateUserDetailsCardRef = useRef(); 
     
     useEffect( () => {
-        
-        const handler = async (e) => {
-			if(!updateUserDetailsCardRef.current.contains(e.target)){
-				if(!imageUploadLoading && !imageDeletionLoading && !loadingForUpdatesHappening){
-					if(cloudinaryImgPublicID !== ''){
-						axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
-							public_id : cloudinaryImgPublicID
-						})
-						.then( (response) => {
-							setCloudinaryImgPublicID(''); 
-						})
-						.catch( (err) => { 
-							console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
-						})
+        if(!localStorage.getItem('jwt')){ 
+			toast.error("Security Logout"); 
+			securityLogout(dispatch); 
+			navigate('/login-email'); 
+		}
+		else{
+			const handler = async (e) => {
+				if(!updateUserDetailsCardRef.current.contains(e.target)){
+					if(!imageUploadLoading && !imageDeletionLoading && !loadingForUpdatesHappening){
+						if(cloudinaryImgPublicID !== ''){
+							axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/delete-cloudinary-asset`, {
+								public_id : cloudinaryImgPublicID
+							})
+							.then( (response) => {
+								setCloudinaryImgPublicID(''); 
+							})
+							.catch( (err) => { 
+								console.log(`Error occured while calling api for deleting cloudinary asset: ${err}`); 
+							})
+						}
+						onClose(); 
 					}
-					onClose(); 
-				}
-				else if(imageUploadLoading){
-					toast.error('You cannot close "Edit Profile Details" tab when new profile pic is being uploaded'); 
-				}
-				else if(imageDeletionLoading){
-					toast.error('You cannot close "Edit Profile Details" tab when new profile pic is being removed'); 
-				}
-				else if(loadingForUpdatesHappening){
-					toast.error('You cannot close "Edit Profile Details" tab when new updates are being made'); 
+					else if(imageUploadLoading){
+						toast.error('You cannot close "Edit Profile Details" tab when new profile pic is being uploaded'); 
+					}
+					else if(imageDeletionLoading){
+						toast.error('You cannot close "Edit Profile Details" tab when new profile pic is being removed'); 
+					}
+					else if(loadingForUpdatesHappening){
+						toast.error('You cannot close "Edit Profile Details" tab when new updates are being made'); 
+					}
 				}
 			}
-        }
 
-        document.addEventListener('mousedown', handler); 
+			document.addEventListener('mousedown', handler); 
 
-        return () => {
-            document.removeEventListener('mousedown', handler);
-        };
+			return () => {
+				document.removeEventListener('mousedown', handler);
+			};
+		}
     })
 
 

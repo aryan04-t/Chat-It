@@ -51,7 +51,7 @@ const Sidebar = () => {
 
     return (
 
-        <div className='bg-zinc-700 w-full h-full grid grid-cols-[48px,1fr] lg:rounded-tr-2xl'>
+        <div className='bg-zinc-700 w-full h-full grid grid-cols-[48px,1fr]'>
 
             <div className='bg-zinc-900 w-12 h-full rounded-tr-xl pt-5 pb-2 flex flex-col justify-between'> 
                 <div className='flex flex-col gap-1.5'>

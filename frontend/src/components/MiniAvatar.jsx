@@ -50,18 +50,18 @@ const MiniAvatar = ({userId, name, secureImageURL, height, width}) => {
                         />
                         {
                             isOnline && 
-                                <div className='bg-green-500 absolute p-1 rounded-full bottom-0.5 right-0.5'></div>
+                                <div className='bg-green-500 absolute p-1 rounded-full bottom-[4px] right-[1px]'></div>
                         }
                     </div>
                 ) : name ? (
                         <div style={{ height : `${height}px`, width : `${width}px` }} className={`relative ml-1 flex justify-center items-center rounded-full cursor-pointer select-none text-md font-serif ${randomBgColour[randomNumber]}`}>
                             {miniAvatarName}
                             {
-                                isOnline && <div className='bg-green-500 absolute p-1 rounded-full bottom-0.5 right-0.5'></div>
+                                isOnline && <div className='bg-green-500 absolute p-1 rounded-full bottom-[4px] right-[1px]'></div>
                             }
                         </div>
                     ) : (
-                        <FaUser className='text-4xl border-white border-4 ml-[5.5px] mb-2 bg-white rounded-full select-none' />
+                        <FaUser style={{ height : `${height}px`, width : `${width}px` }} className='text-4xl border-white border-4 ml-[5.5px] bg-white rounded-full select-none' />
                     )
             }
         </>

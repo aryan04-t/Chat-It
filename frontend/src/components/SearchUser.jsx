@@ -168,8 +168,8 @@ const SearchUser = ({onClose, user}) => {
 
 
     return (
-        <div className='fixed h-full w-full bg-transparent'>
-            <div id='search-user-bar-container' className='fixed centered-search-bar-around w-full max-w-sm z-10'>
+        <div className='fixed h-full w-full bg-transparent z-40'>
+            <div id='search-user-bar-container' className='fixed centered-search-bar-around w-full max-w-sm z-50'>
                 <div className='relative w-[95%] max-w-sm mx-[2.5%] bg-zinc-700 mt-10 p-5 rounded-2xl' ref={searchBarCardRef}>
                     
                     <label htmlFor='search-bar' className='text-lg text-yellow-200 font-sans mx-2 cursor-pointer select-none'> Search User </label> 

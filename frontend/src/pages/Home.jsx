@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser, setProfilePicPublicId, setOnlineUsers } from '../redux/userSlice'
+import { createContext } from 'react'
 
 import toast from 'react-hot-toast'
 
@@ -12,6 +13,9 @@ import Sidebar from '../components/Sidebar'
 import favicon from '../assets/favicon.png'
 import sessionTimeOutLogout from '../helpers/sessionTimeOutLogout' 
 import securityLogout from '../helpers/securityLogout'
+
+
+export const SocketContext = createContext(null); 
 
 
 const Home = () => {
@@ -43,7 +47,9 @@ const Home = () => {
 			}
 		})
 	} 
-
+	
+	const [socketConnectionData, setSocketConnectionData] = useState(null); 
+	
 	useEffect( () => {
 		if(!localStorage.getItem('jwt')){ 
 			toast.error("Security Logout"); 
@@ -52,28 +58,27 @@ const Home = () => {
 		}
 		else{
 			fetchUserDetails();
-		}
-	}) 
 
+			const socketConnection = io(import.meta.env.VITE_BACKEND_URL, {
+				auth : {
+					token : localStorage.getItem('jwt') 
+				},
+				transports : ['websocket'] 
+			});  
 
-	useEffect( () => {
-		const socketConnection = io(import.meta.env.VITE_BACKEND_URL, {
-			auth : {
-				token : localStorage.getItem('jwt') 
-			},
-			transports : ['websocket'] 
-		});  
+			setSocketConnectionData(socketConnection); 
 
-		socketConnection.on('onlineUser', (data) => {
-			console.log(data); 
-			dispatch(setOnlineUsers(data)); 
-		})
+			socketConnection.on('onlineUsers', (data) => {
+				console.log(data); 
+				dispatch(setOnlineUsers(data)); 
+			})
 
-		return () => {
-			socketConnection.disconnect(); 
+			return () => {
+				socketConnection.disconnect(); 
+			}
 		}
 	}, []) 
-
+	
 
 	const basePath = location.pathname === '/'; 
 
@@ -84,7 +89,9 @@ const Home = () => {
 			</section>
 
 			<section className={`${basePath && 'hidden'}`}>
-				<Outlet />
+				<SocketContext.Provider value={socketConnectionData} > 
+					<Outlet /> 
+				</SocketContext.Provider> 
 			</section>
 
 			<div className={`hidden lg:${!basePath && 'hidden'} lg:${basePath && 'block'} h-screen max-h-screen select-none`}>

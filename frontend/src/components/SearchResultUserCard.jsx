@@ -9,9 +9,7 @@ const SearchResultUserCard = ({onClose, appUser}) => {
     const navigate = useNavigate(); 
 
     const selectedUser = (e) => {
-        navigate(`/${appUser._id}`, {
-            state : appUser
-        }); 
+        navigate(`/${appUser._id}`); 
         onClose(); 
     }    
 

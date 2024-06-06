@@ -281,8 +281,8 @@ const EditUserDetails = ({onClose, user}) => {
 
 
   	return (
-		<div className='fixed h-full w-full bg-transparent'>
-			<div id='update-user-details-card' ref={updateUserDetailsCardRef} className='fixed centered-axis-xy flex justify-center items-center select-none rounded-2xl z-10' > 
+		<div className='fixed h-full w-full bg-transparent z-20'>
+			<div id='update-user-details-card' ref={updateUserDetailsCardRef} className='fixed centered-axis-xy flex justify-center items-center select-none rounded-2xl z-30' > 
 				<div className='bg-zinc-800 w-full max-w-[400px] rounded-2xl overflow-hidden p-2 flex flex-col justify-center items-center'>
 
 					<div className='w-full flex justify-end'>

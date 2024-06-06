@@ -5,7 +5,7 @@ import SignUpPage from '../pages/SignUpPage';
 import CheckEmailLoginPage from '../pages/CheckEmailLoginPage';
 import CheckPasswordLoginPage from '../pages/CheckPasswordLoginPage';
 import Home from '../pages/Home'; 
-import MessagePage from '../components/MessagePage'; 
+import ChattingPage from '../components/ChattingPage'; 
 import AuthLayout from '../layouts/AuthLayout';
 import ErrorPage from '../pages/ErrorPage';
 import ChangePasswordPage from '../pages/ChangePasswordPage';
@@ -73,8 +73,8 @@ const router = createBrowserRouter([
                 errorElement : <ErrorPage />,
                 children : [
                     {
-                        path : ':user-id', 
-                        element : <MessagePage />,
+                        path : ':userId', 
+                        element : <ChattingPage />,
                         errorElement : <ErrorPage />
                     }
                 ]

@@ -2,6 +2,7 @@ import express from 'express'
 import { Server } from 'socket.io' 
 import http from 'http' 
 import getUserDetailsFromToken from '../utils/getUserDetailsFromToken.js';
+import userModel from '../models/userModel.js';
 
 
 const app = express(); 
@@ -15,7 +16,7 @@ const io = new Server(server, {
 })
 
 
-const onlineUser = new Set(); 
+const onlineUsers = new Set(); 
 
 
 io.on('connection', async (socket) => {
@@ -23,23 +24,33 @@ io.on('connection', async (socket) => {
     console.log(`User connected: ${socket.id}`); 
 
     const token = socket.handshake.auth.token; 
-
-    console.log(token); 
     const user = await getUserDetailsFromToken(token);
-    console.log(user);
     
     socket.join(user?._id); 
-    onlineUser.add(user?._id); 
+    onlineUsers.add(user?._id?.toString()); 
 
-    console.log(onlineUser);
+    console.log(onlineUsers);
 
-    io.emit('onlineUser', Array.from(onlineUser)); 
+    io.emit('onlineUsers', Array.from(onlineUsers)); 
+
+    socket.on('i-want-to-chat-with-this-user', async (userId) => {
+        console.log('I am invoked'); 
+        const userDetails = await userModel.findById(userId).select('-password'); 
+        const payload = {
+            _id : userDetails?._id, 
+            name : userDetails?.name, 
+            email : userDetails?.email, 
+            profile_pic : userDetails?.profile_pic, 
+            online : onlineUsers.has(userId) 
+        }
+        socket.emit('chat-receiving-user-details', payload); 
+    })
     
     socket.on('disconnect', () => {
-        onlineUser.delete(user?._id); 
-        io.emit('onlineUser', Array.from(onlineUser)); 
+        onlineUsers.delete(user?._id?.toString()); 
+        io.emit('onlineUsers', Array.from(onlineUsers)); 
         console.log(`User disconnected: ${socket.id}`); 
-        console.log(onlineUser);
+        console.log(onlineUsers);
     })
 })
 

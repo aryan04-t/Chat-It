@@ -2,9 +2,11 @@ import React, { useEffect } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser, setProfilePicPublicId } from '../redux/userSlice'
+import { setUser, setProfilePicPublicId, setOnlineUsers } from '../redux/userSlice'
 
 import toast from 'react-hot-toast'
+
+import io from 'socket.io-client'
 
 import Sidebar from '../components/Sidebar'
 import favicon from '../assets/favicon.png'
@@ -17,10 +19,10 @@ const Home = () => {
 	const dispatch = useDispatch(); 
 	const user = useSelector(state => state.user); 
 
+	console.log(user); 
+
 	const navigate = useNavigate(); 
 	const location = useLocation(); 
-
-	console.log(user); 
 
 	const fetchUserDetails = () => {
 		axios({
@@ -52,6 +54,26 @@ const Home = () => {
 			fetchUserDetails();
 		}
 	}) 
+
+
+	useEffect( () => {
+		const socketConnection = io(import.meta.env.VITE_BACKEND_URL, {
+			auth : {
+				token : localStorage.getItem('jwt') 
+			},
+			transports : ['websocket'] 
+		});  
+
+		socketConnection.on('onlineUser', (data) => {
+			console.log(data); 
+			dispatch(setOnlineUsers(data)); 
+		})
+
+		return () => {
+			socketConnection.disconnect(); 
+		}
+	}, []) 
+
 
 	const basePath = location.pathname === '/'; 
 

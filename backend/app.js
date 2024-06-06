@@ -11,6 +11,8 @@ import cloudinaryRoutes from './routes/cloudinaryRoutes.js';
 
 import connectToDB from './db/connectToMongoDB.js';
 
+import {app, server} from './socket/index.js' 
+
 
 dotenv.config();
 cloudinary.config({ 
@@ -19,7 +21,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET 
 });
 
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 8000;
 
 
@@ -38,7 +40,7 @@ app.use('/api/user', userRoutes);
 
 
 connectToDB().then( () => {
-    app.listen(PORT, (err) => {
+    server.listen(PORT, (err) => {
         if(err){
             console.log(`Error occured while starting the server in app.js`);
         }

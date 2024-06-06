@@ -1,8 +1,11 @@
 import React from "react"; 
 import { FaUser } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 
-const MiniAvatar = ({name, secureImageURL, height, width}) => {
+const MiniAvatar = ({userId, name, secureImageURL, height, width}) => {
+
+    const currOnlineUsers = useSelector(state => state?.user?.onlineUsers); 
 
     let miniAvatarName = ""; 
 
@@ -30,23 +33,32 @@ const MiniAvatar = ({name, secureImageURL, height, width}) => {
 
     const randomNumber = Math.floor(Math.random() * 5);
 
+    const isOnline = currOnlineUsers.includes(userId); 
+
     return(
 
         <>
             {
                 secureImageURL ? (
-                    <div style={{ height : `${height}px`, width : `${width}px` }} >
+                    <div style={{ height : `${height}px`, width : `${width}px` }} className='relative ml-1' >
                         <img 
                             src={secureImageURL} 
                             alt="User Profile Pic" 
-                            className='ml-1 rounded-full overflow select-none'
+                            className='rounded-full overflow select-none'
                             height={height}
                             width={width}
                         />
+                        {
+                            isOnline && 
+                                <div className='bg-green-500 absolute p-1 rounded-full bottom-0.5 right-0.5'></div>
+                        }
                     </div>
                 ) : name ? (
-                        <div style={{ height : `${height}px`, width : `${width}px` }} className={`ml-1 overflow-hidden flex justify-center items-center rounded-full cursor-pointer select-none text-md font-serif ${randomBgColour[randomNumber]}`}>
+                        <div style={{ height : `${height}px`, width : `${width}px` }} className={`relative ml-1 flex justify-center items-center rounded-full cursor-pointer select-none text-md font-serif ${randomBgColour[randomNumber]}`}>
                             {miniAvatarName}
+                            {
+                                isOnline && <div className='bg-green-500 absolute p-1 rounded-full bottom-0.5 right-0.5'></div>
+                            }
                         </div>
                     ) : (
                         <FaUser className='text-4xl border-white border-4 ml-[5.5px] mb-2 bg-white rounded-full select-none' />

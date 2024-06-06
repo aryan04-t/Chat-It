@@ -11,6 +11,11 @@ import SearchResultUserCard from './SearchResultUserCard.jsx'
 import LoadingSpinner from './LoadingSpinner.jsx'
 import sessionTimeOutLogout from '../helpers/sessionTimeOutLogout.js'
 import securityLogout from '../helpers/securityLogout.js'
+import validateSearchQuery from '../helpers/validateSearchQuery.js'
+
+
+let shouldConstantSearchOccur = true; 
+let searchWhenUserStopsTypingFor500ms; 
 
 
 const SearchUser = ({onClose, user}) => {
@@ -48,7 +53,10 @@ const SearchUser = ({onClose, user}) => {
         }
     })
 
+
     const onSubmitSearchDatabase = (e) => {
+
+        clearInterval(searchWhenUserStopsTypingFor500ms);
 
         setLoading(true); 
 
@@ -84,12 +92,17 @@ const SearchUser = ({onClose, user}) => {
         })
     }
     
-    
-    const searchDatabaseConstantly = () => {
+    const searchDatabaseConstantly = (shouldSearchOccur) => {
 
         if(searchQuery === ''){
             setSearchDone(false); 
             setSearchResultIsHidden(true); 
+            return;
+        }
+
+        if(!shouldSearchOccur){
+            setSearchDone(false); 
+            setSearchResultIsHidden(true);
             return;
         }
 
@@ -112,6 +125,8 @@ const SearchUser = ({onClose, user}) => {
         .catch( (err) => {
             toast.error(err?.response?.data?.message); 
             setLoading(false); 
+            setSearchDone(false); 
+            setSearchResultIsHidden(true);
             console.log(err); 
 			if(err?.response?.data?.logout){
 				sessionTimeOutLogout(dispatch); 
@@ -121,21 +136,41 @@ const SearchUser = ({onClose, user}) => {
     }
 
 
+    const [isSearchBarErrorTextInvisible, setIsSearchBarErrorTextInvisible] = useState(true); 
+    const [searchBarErrorText, setSearchBarErrorText] = useState('Display Search Bar Error Text'); 
+    
+
+    const searchQueryChangeHandler = (e) => {
+        const value = e.target.value; 
+        shouldConstantSearchOccur = validateSearchQuery(value, {
+            setIsSearchBarErrorTextInvisible,
+            setSearchBarErrorText
+        }); 
+        setSearchQuery(value); 
+    }
+
     useEffect( () => {
-        searchDatabaseConstantly();  
+        searchWhenUserStopsTypingFor500ms = setTimeout( () => {
+            searchDatabaseConstantly(shouldConstantSearchOccur); 
+        }, 500);
+        return () => {
+            clearTimeout(searchWhenUserStopsTypingFor500ms); 
+        }
     }, [searchQuery])
 
 
     const closeSearchResult = (e) => {
+        e.preventDefault(); 
+        e.stopPropagation(); 
         setSearchResultIsHidden(true); 
-        setSearchDone(false);
+        setSearchDone(false); 
     }
 
 
     return (
         <div className='fixed h-full w-full bg-transparent'>
             <div id='search-user-bar-container' className='fixed centered-search-bar-around w-full max-w-sm z-10'>
-                <div className='relative w-[95%] max-w-sm mx-[2.5%] bg-zinc-700 mt-5 p-5 rounded-2xl' ref={searchBarCardRef}>
+                <div className='relative w-[95%] max-w-sm mx-[2.5%] bg-zinc-700 mt-10 p-5 rounded-2xl' ref={searchBarCardRef}>
                     
                     <label htmlFor='search-bar' className='text-lg text-yellow-200 font-sans mx-2 cursor-pointer select-none'> Search User </label> 
 
@@ -151,11 +186,11 @@ const SearchUser = ({onClose, user}) => {
                             id='search-bar' 
                             placeholder='Search user by name, email...'
                             value={searchQuery} 
-                            onChange={ (e) => setSearchQuery(e.target.value) }
+                            onChange={searchQueryChangeHandler}
                             required
                             className='w-full outline-none py-[4.6px] h-full pl-4 pr-8 rounded-full text-white bg-zinc-950' 
                         />
-                        <button type='submit' className='-ml-[30px] mt-[1.2px] text-white hover:text-green-500 w-7 h-7 flex justify-center items-center rounded-full'>
+                        <button disabled={!shouldConstantSearchOccur} type='submit' className='-ml-[30px] mt-[1.2px] text-white hover:text-green-500 w-7 h-7 flex justify-center items-center rounded-full'>
                             {
                                 loading ? (
                                     <LoadingSpinner height={5} width={5} />
@@ -165,6 +200,7 @@ const SearchUser = ({onClose, user}) => {
                             }
                         </button> 
                     </form>
+                    <p className={'text-[10px] text-red-500 pl-2 pr-1 font-mono rounded-md mt-2 mx-2 mb-1 w-72 h-6 text-center '  + `${isSearchBarErrorTextInvisible && 'invisible'}`}> {searchBarErrorText} </p>
                 </div>
             
                 {/* Display Search Results */} 

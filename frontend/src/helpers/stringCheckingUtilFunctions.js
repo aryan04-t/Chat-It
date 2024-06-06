@@ -1,4 +1,4 @@
-const isSpecialCharacter = (ch) => {
+const isASpecialCharacterExceptSpace = (ch) => {
     const allowedChars = /^[a-zA-Z0-9 ]$/;         
     return !allowedChars.test(ch); 
 }
@@ -8,7 +8,7 @@ export const isNumber = (ch) => {
 }
 
 const isALetterOfAlphabetOrSpace = (ch) => {
-    if(isSpecialCharacter(ch)) return false; 
+    if(isASpecialCharacterExceptSpace(ch)) return false; 
     else if(ch === ' ') return true; 
     else if(isNumber(ch)){
         return false;

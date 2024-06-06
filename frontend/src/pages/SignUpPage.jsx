@@ -223,7 +223,7 @@ const SignUpPage = () => {
 
 
     const inputFieldCSS = 'px-2 py-1 focus:outline-blue-600 rounded-md mt-1 mx-2 w-72'; 
-    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 w-72 '; 
+    const inputFieldErrorMessageCSS = 'text-[10px] text-red-500 pl-2 pr-1 font-mono rounded-md mt-1 mx-2 w-72 '; 
     const labelCSS = 'text-md text-white font-sans mx-2 cursor-pointer'; 
 
 

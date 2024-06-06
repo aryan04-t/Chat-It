@@ -160,7 +160,7 @@ const validateInputFields = (name, value, setters) => {
                 }
                 else if(!isLowerCase(pieces[0][i]) && !isNumber(pieces[0][i]) && pieces[0][i] !== '.'){
                     setIsEmailErrorTextInvisible(false); 
-                    setEmailErrorText("Only chars (a-z), (0-9), and '.' are allowed"); 
+                    setEmailErrorText("Only (a-z), (0-9), and '.' are allowed in username"); 
                     return; 
                 }
             }

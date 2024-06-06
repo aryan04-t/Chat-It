@@ -84,7 +84,7 @@ const CheckEmailLoginPage = () => {
 							onChange={handleEmailInput}
 							required
 						/>
-						<p className={'text-[10px] text-red-500 px-2 font-mono rounded-md mt-1 mx-2 mb-1 w-72 ' + `${isEmailErrorTextInvisible && 'invisible'}`}> {emailErrorText} </p> 
+						<p className={'text-[10px] text-red-500 pl-2 pr-1 font-mono rounded-md mt-1 mx-2 mb-1 w-72 ' + `${isEmailErrorTextInvisible && 'invisible'}`}> {emailErrorText} </p> 
 					</div>
 					<div className='flex justify-center items-center'>
                         <button disabled={isVerifyUserButtonDisabled || loadingForFormSubmission} type='submit' 

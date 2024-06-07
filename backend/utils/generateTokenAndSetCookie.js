@@ -10,7 +10,7 @@ const generateTokenAndSetCookie = (payload, res) => {
         const cookieOptions =  {
             maxAge : 15 * 24 * 60 * 60 * 1000,      // Cookie Expiry time in Milliseconds 
             httpOnly : true,                        // Prevents XSS attacks, aka cross-site scripting attacks 
-            sameSite : "strict",                    // CSRF attacks, aka cross-site request forgery attacks 
+            sameSite : "None",                      // Stops CSRF attacks if set "Strict", aka cross-site request forgery attacks 
             secure : true
         };
 

@@ -5,6 +5,12 @@ const protectRoute = async (req, res, next) => {
     try{
         const token = req.cookies.jwt || ''; 
 
+        console.log('This is the token');
+        console.log(token); 
+
+        console.log('All cookies'); 
+        console.log(req.cookies); 
+
         if(!token){
             return res.status(401).json({
                 message : 'Session timeout',
